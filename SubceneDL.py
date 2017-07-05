@@ -19,8 +19,8 @@ from time import sleep
 search = "https://subscene.com/subtitles/title"
 real_directory = []
 ext = ['.mp4', '.mkv', '.avi', '.flv']
-for extension in ext:
-	activedir_files = [i for i in os.listdir('.') if i in extension]
+activedir_files = [i for extension in ext for i in os.listdir('.') if extension in i]
+
 language = {
 "AR" : "Arabic",
 "BU" : "Burmese",
@@ -44,47 +44,6 @@ for folders, subfolders, files in os.walk('.'):
         oswalk_files.append(i)
 
 
-def whitespace_check(name):
-	while True:
-		if '  ' not in name:
-			break
-		name = name.replace('  ', ' ')
-	return name
-
-
-def name_parser(filename):
-	'''Name parser for folders, remove anything after movie
-	name and year etc.'''
-	moviename, year, meta = filename.partition(get_year(filename))
-	if moviename != None:
-		return moviename + year
-	else:
-		return filename
-
-
-def get_nonalpha(name):
-	'''Get Non-AlphaNumeric characters from the filenames.'''
-	removals = []
-	if re.findall(r'\W', name) not in removals and re.findall(r'\W', name) != None:
-		removals = removals + re.findall(r'\W', name)
-	return removals
-
-
-def remove_nonalpha():
-	'''Remove Non-AlphaNumeric characters from the filenames.'''
-	non_alphanums = []
-	new_movie_names = []
-	for files in activedir_files:
-		files = name_parser(files)
-		for nonalphanum in get_nonalpha(files):
-			if nonalphanum not in non_alphanums:
-				non_alphanums.append(nonalphanum)
-		for items in non_alphanums:
-			files = whitespace_check(files.replace(items, ' '))
-		new_movie_names.append(files)
-	return new_movie_names
-
-
 def create_folder():
     '''Search for MP4, MKV, AVI extensions inside the current
     directory and If any of the files ending with such
@@ -106,7 +65,6 @@ def create_folder():
                     pass
                 else:
                     continue
-
 
 
 def simple_search():
