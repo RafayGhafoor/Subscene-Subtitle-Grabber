@@ -239,18 +239,32 @@ def name_grabber(medialst):
 	return nameslist
 
 
+#def directory_obtainer():
+    #'''Gets movies names contained in a directory.'''
+    #global real_directory
+    #global ext
+    #for i in oswalk_files:
+        #for extension in ext:
+         #   if i.endswith(extension):
+        #        if '.' + os.path.sep in i:
+       #             real_directory.append(i.replace('./', ''))
+      #          else:
+     #               real_directory.append(i)
+    #return real_directory
+
 def directory_obtainer():
     '''Gets movies names contained in a directory.'''
     global real_directory
     global ext
-    for i in oswalk_files:
-        for extension in ext:
-            if i.endswith(extension):
-                if '.' + os.path.sep in i:
-                    real_directory.append(i.replace('./', ''))
-                else:
-                    real_directory.append(i)
-    return real_directory
+    for folders, subfolders, files in os.walk('.'):
+        for elements in files:
+            for extension in ext:
+                if elements.endswith(extension):
+                    if './' in elements:
+                        real_directory.append(elements.replace('./', ''))
+                    else:
+                        real_directory.append(elements)
+return real_directory
 
 
 def file_locator(name):
