@@ -1,10 +1,21 @@
 import requests
+import timeit
 import bs4
 
-
 SUB_QUERY = "https://subscene.com/subtitles/title"
-SUB_COMMENTS = {"Perfect Sync": 10, "Update": 2, "Thanks": 6, "Fixed": 4}
-SCORING = ""
+LANGUAGE = {
+"AR" : "arabic",
+"BU" : "burmese",
+"DA" : "danish",
+"DU" : "dutch",
+"EN" : "english",
+"FA" : "farsi_persian",
+"IN" : "indonesian",
+"IT" : "italian",
+"MA" : "malay",
+"SP" : "spanish",
+"VI" : "vietnamese"
+}
 
 
 def scrape_page(url, parameter=''):
@@ -18,17 +29,7 @@ def scrape_page(url, parameter=''):
     return req_html
 
 
-def get_title(html_content):
-    '''
-    Gets media name titles from subscene site.
-    '''
-    if html_content.find('div', {"class": "search-result"}).h2.string == "No results found":
-        print "Sorry, the subtitles for this media file aren't available."
-        return
-    return html_content.findAll("div", {"class": "search-result"})
-    
-
-def sel_title_name(title_lst, name='', year='', mode=1):
+def select_title(name='', year='', mode=1):
     '''
     Select title of the media (i.e., Movie, TV-Series)
     :param title_lst: Title Names from the function get_title
@@ -39,9 +40,14 @@ def sel_title_name(title_lst, name='', year='', mode=1):
     if not name and not year:
         print "Invalid Input."
         return
-        
+    
+    soup = scrape_page(url=SUB_QUERY, parameter=name)
+    if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
+        print "Sorry, the subtitles for this media file aren't available."
+        return
+
+    title_lst = soup.findAll("div", {"class": "search-result"})        
     for titles in title_lst:
-        print titles
         popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
         if mode == 1:
             title_link = silent_mode(titles, name=name, year=year)
@@ -50,7 +56,7 @@ def sel_title_name(title_lst, name='', year='', mode=1):
             return cli_mode(titles)
         
 
-def silent_mode(title_name, name='', year=''):
+def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
     '''
     An automatic mode for selecting media title from subscene site.
     :param title_name: title names obtained from get_title function.
@@ -70,23 +76,23 @@ def silent_mode(title_name, name='', year=''):
         if category == "Popular": # Searches in Popular Category and the categories next to it.
             section = popular.find_all_next("div", {"class": "title"})
         else: # Searches in categories above popular tag.
-            section = titles.find_all("div", {"class": "title"})
+            section = title_name.find_all("div", {"class": "title"})
         for results in section:
             match = 1        
             for letter in name.split():            
                 if letter.lower() in results.a.text.lower() and year in results.a.text.lower():
                     if len(name.split()) == match:
-                        return "https://subscene.com" + results.a.get("href")
+                        return "https://subscene.com" + results.a.get("href") + "/" + lang
                     match += 1
 
     # Searches first in Popular category, if found, returns the title name
     obt_link = html_navigator(category="Popular")
     if not obt_link:    # If not found in the popular category, searches in other category
-        return html_navigator(category="n_popular")
+        return html_navigator(category="other_than_popular")
     return obt_link
 
                 
-def cli_mode(titles_name):    
+def cli_mode(titles_name, lang=LANGUAGE["EN"]):    
     '''
     A manual mode driven by user, allows user to select subtitles manually
     from the command-line.
@@ -97,16 +103,16 @@ def cli_mode(titles_name):
     popular = titles_name.find("h2", {"class": "popular"})
     
     for i, x in enumerate(popular.find_all_next("div", {"class": "title"})):
-        titles_and_links[x.text.strip()] = x.a.get("href") 
-        print "(%s): %s" % (i, x.text.strip())
-        media_titles.append(x.text.strip())        
+        title_text = x.text.strip()
+        titles_and_links[title_text] = x.a.get("href") 
+        print "(%s): %s" % (i, title_text.encode("ascii", "ignore"))
+        media_titles.append(title_text)
     
-    qs = int(raw_input("Please Enter Movie Number: ")) 
-    return "https://subscene.com" + titles_and_links[media_titles[qs]]
+    qs = int(raw_input("\nPlease Enter Movie Number: ")) 
+    return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + lang
                     
     
 if __name__ == "__main__":
-    soup = scrape_page(url=SUB_QUERY, parameter="sherlock third season")
-    titles = get_title(soup)
-    sub_link = sel_title_name(titles, name="sherlock second season", year="", mode=2)
+    # Not working for name = Pele Birth of the legend
+    sub_link = select_title(name="Pel Birth of the legend", year="", mode=1)
     print sub_link
