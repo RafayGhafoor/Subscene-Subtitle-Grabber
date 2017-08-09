@@ -29,33 +29,6 @@ def scrape_page(url, parameter=''):
     return req_html
 
 
-def select_title(name='', year='', mode=1):
-    '''
-    Select title of the media (i.e., Movie, TV-Series)
-    :param title_lst: Title Names from the function get_title
-    :param name: Media Name. For Example: "Doctor Strange"
-    :param year: Media Year. For Example: "2016"
-    :param mode: Select CLI Mode or Silent Mode.
-    '''
-    if not name and not year:
-        print "Invalid Input."
-        return
-    
-    soup = scrape_page(url=SUB_QUERY, parameter=name)
-    if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
-        print "Sorry, the subtitles for this media file aren't available."
-        return
-
-    title_lst = soup.findAll("div", {"class": "search-result"})        
-    for titles in title_lst:
-        popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
-        if mode == 1:
-            title_link = silent_mode(titles, name=name, year=year)
-            return title_link
-        else:
-            return cli_mode(titles)
-        
-
 def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
     '''
     An automatic mode for selecting media title from subscene site.
@@ -78,8 +51,8 @@ def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
         else: # Searches in categories above popular tag.
             section = title_name.find_all("div", {"class": "title"})
         for results in section:
-            match = 1        
-            for letter in name.split():            
+            match = 1
+            for letter in name.split():
                 if letter.lower() in results.a.text.lower() and year in results.a.text.lower():
                     if len(name.split()) == match:
                         return "https://subscene.com" + results.a.get("href") + "/" + lang
@@ -91,8 +64,8 @@ def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
         return html_navigator(category="other_than_popular")
     return obt_link
 
-                
-def cli_mode(titles_name, lang=LANGUAGE["EN"]):    
+
+def cli_mode(titles_name, lang=LANGUAGE["EN"]):
     '''
     A manual mode driven by user, allows user to select subtitles manually
     from the command-line.
@@ -101,18 +74,59 @@ def cli_mode(titles_name, lang=LANGUAGE["EN"]):
     media_titles = [] # Contains key names of titles_and_links dictionary.
     titles_and_links = {} # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
     popular = titles_name.find("h2", {"class": "popular"})
-    
+
     for i, x in enumerate(popular.find_all_next("div", {"class": "title"})):
         title_text = x.text.strip()
-        titles_and_links[title_text] = x.a.get("href") 
+        titles_and_links[title_text] = x.a.get("href")
         print "(%s): %s" % (i, title_text.encode("ascii", "ignore"))
         media_titles.append(title_text)
-    
-    qs = int(raw_input("\nPlease Enter Movie Number: ")) 
+
+    qs = int(raw_input("\nPlease Enter Movie Number: "))
     return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + lang
-                    
-    
+
+
+def select_title(name='', year='', mode=1):
+    '''
+    Select title of the media (i.e., Movie, TV-Series)
+    :param title_lst: Title Names from the function get_title
+    :param name: Media Name. For Example: "Doctor Strange"
+    :param year: Media Year. For Example: "2016"
+    :param mode: Select CLI Mode or Silent Mode.
+    '''
+    if not name and not year:
+        print "Invalid Input."
+        return
+
+    soup = scrape_page(url=SUB_QUERY, parameter=name)
+    if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
+        print "Sorry, the subtitles for this media file aren't available."
+        return
+
+    title_lst = soup.findAll("div", {"class": "search-result"})
+    for titles in title_lst:
+        popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
+        if mode == 1:
+            title_link = silent_mode(titles, name=name, year=year)
+            return title_link
+        else:
+            return cli_mode(titles)
+
+# Select Subtitles
+def sel_sub(page, sub_count=1):
+    soup = scrape_page(page)
+    sub_list = []
+    active_sub = 0
+    for link in soup.find_all('td', {'class': 'a1'}):
+        for down_link in link.find_all('a'):
+                if active_sub < sub_count:
+                    if 'Trailer' not in link.text:
+                        if down_link.get('href') not in sub_list:
+                            sub_list.append(down_link.get('href'))
+                            active_sub += 1
+    return ['https://subscene.com' + i for i in sub_list]
+
+
 if __name__ == "__main__":
     # Not working for name = Pele Birth of the legend
-    sub_link = select_title(name="Pel Birth of the legend", year="", mode=1)
-    print sub_link
+    sub_link = select_title(name="Doctor Strange", year="2016", mode=1)
+    print sel_sub(sub_link)
