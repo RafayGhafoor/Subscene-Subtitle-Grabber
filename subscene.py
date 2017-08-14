@@ -126,7 +126,7 @@ def sel_sub(page, sub_count=1):
         if active_sub < sub_count and 'Trailer' not in link.text\
                         and link.get('href') not in sub_list:
             sub_list.append(link.get('href'))
-            active_sub += 1               
+            active_sub += 1
     return ['https://subscene.com' + i for i in sub_list]
 
 
@@ -151,7 +151,6 @@ def dl_sub(page):
 
 if __name__ == "__main__":
     # Not working for name = Pele Birth of the legend
-    sub_link = select_title(name="Pele birth of legend", year="2016", mode=2)
+    sub_link = select_title(name="Doctor Strange 2016.mkv", year="2016", mode=2)
     for i in sel_sub(sub_link):
         dl_sub(i)
-
