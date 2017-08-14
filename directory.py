@@ -3,7 +3,6 @@ import shutil
 import os
 import zipfile
 import subscene
-os.chdir("C:\Users\Habiba Ghafoor\Downloads\Movies")
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}
