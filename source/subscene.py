@@ -1,9 +1,11 @@
+import time
 import requests
 import re
 import timeit
 import bs4
 
 SUB_QUERY = "https://subscene.com/subtitles/title"
+SUB_QUERY_REL = "https://subscene.com/subtitles/release?q="
 LANGUAGE = {
 "AR" : "arabic",
 "BU" : "burmese",
@@ -17,6 +19,7 @@ LANGUAGE = {
 "SP" : "spanish",
 "VI" : "vietnamese"
 }
+DEFAULT_LANG = LANGUAGE["EN"]
 
 
 def scrape_page(url, parameter=''):
@@ -30,7 +33,20 @@ def scrape_page(url, parameter=''):
     return req_html
 
 
-def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
+def zip_extractor(name):
+    '''
+    Extracts zip file obtained from the Subscene site (which contains subtitles).
+    '''
+    try:
+        with zipfile.ZipFile(name, "r") as z:
+            # print ZipFile.infolist()
+            z.extractall(".")
+        os.remove(name)
+    except:
+        pass
+
+
+def silent_mode(title_name, name='', year=''):
     '''
     An automatic mode for selecting media title from subscene site.
     :param title_name: title names obtained from get_title function.
@@ -56,7 +72,7 @@ def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
             for letter in name.split():
                 if letter.lower() in results.a.text.lower() and year in results.a.text.lower():
                     if len(name.split()) == match:
-                        return "https://subscene.com" + results.a.get("href") + "/" + lang
+                        return "https://subscene.com" + results.a.get("href") + "/" + DEFAULT_LANG
                     match += 1
 
     # Searches first in Popular category, if found, returns the title name
@@ -66,7 +82,7 @@ def silent_mode(title_name, name='', year='', lang=LANGUAGE["EN"]):
     return obt_link
 
 
-def cli_mode(titles_name, lang=LANGUAGE["EN"]):
+def cli_mode(titles_name):
     '''
     A manual mode driven by user, allows user to select subtitles manually
     from the command-line.
@@ -83,7 +99,7 @@ def cli_mode(titles_name, lang=LANGUAGE["EN"]):
         media_titles.append(title_text)
 
     qs = int(raw_input("\nPlease Enter Movie Number: "))
-    return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + lang
+    return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
 
 def select_title(name='', year='', mode=1):
@@ -99,8 +115,12 @@ def select_title(name='', year='', mode=1):
         return
 
     soup = scrape_page(url=SUB_QUERY, parameter=name)
-    if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
-        print "Sorry, the subtitles for this media file aren't available."
+    try:
+        if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
+            print "Sorry, the subtitles for this media file aren't available."
+            return
+    except AttributeError:
+        # print name, year
         return
 
     title_lst = soup.findAll("div", {"class": "search-result"})
@@ -118,6 +138,7 @@ def sel_sub(page, sub_count=1):
     Select subtitles from the movie page.
     :param sub_count: Number of subtitles to be downloaded.
     '''
+    # start_time = time.time()
     soup = scrape_page(page)
     sub_list = []
     active_sub = 0
@@ -127,6 +148,7 @@ def sel_sub(page, sub_count=1):
                         and link.get('href') not in sub_list:
             sub_list.append(link.get('href'))
             active_sub += 1
+    # print("--- sel_sub took %s seconds ---" % (time.time() - start_time))
     return ['https://subscene.com' + i for i in sub_list]
 
 
@@ -135,6 +157,7 @@ def dl_sub(page):
     Download subtitles obtained from the select_subtitle
     function i.e., movie subtitles links.
     '''
+    # start_time = time.time()
     soup = scrape_page(page)
     div = soup.find('div', {'class': 'download'})
     down_link = 'https://subscene.com' + div.find('a').get('href')
@@ -146,11 +169,6 @@ def dl_sub(page):
             for chunk in r.iter_content(chunk_size=150):
                 if chunk:
                     f.write(chunk)
-    # print "Subtitle (%s) - Downloaded" % name
-
-
-if __name__ == "__main__":
-    # Not working for name = Pele Birth of the legend
-    sub_link = select_title(name="Doctor Strange 2016.mkv", year="2016", mode=2)
-    for i in sel_sub(sub_link):
-        dl_sub(i)
+        zip_extractor(name)
+    print "Subtitle (%s) - Downloaded" % name.capitalize()
+    # print("--- download_sub took %s seconds ---" % (time.time() - start_time))

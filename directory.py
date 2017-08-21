@@ -2,11 +2,12 @@ import re
 import shutil
 import os
 import zipfile
-import subscene
+import source.subscene as subscene
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}
 REMOVALS = [] # Which already contains subtitles
+
 
 def create_folder():
     '''
@@ -18,28 +19,37 @@ def create_folder():
     '''
     for files in ACTIVEDIR_FILES:
         for extension in EXT:
-                if files.endswith(extension):
-                    # Creates a folder of same name as file (excluding file extension)
-                    try:
-                        os.mkdir(files.strip(extension))
-                        shutil.move(files, files.strip(extension))  # Moves the file to the new folder
-                    except OSError:
-                        pass  # If folder exists for the filename
+            if files.endswith(extension):
+                # Creates a folder of same name as file (excluding file extension)
+                try:
+                    os.mkdir(files.strip(extension))
+                    shutil.move(files, files.strip(extension))  # Moves the file to the new folder
+                except OSError:
+                    pass  # If folder exists for the filename
 
 
 def get_media_files():
-    import time
-    start_time = time.time()
+    '''
+    Obtains media files from the current/specified directory.
+    '''
+    # start_time = time.time()
     for folders, subfolders, files in os.walk('.'):
         for i in files:
-            folders = folders.replace('.\\', '')
+            # folders = folders.replace('.\\', '')
+            folders = folders.replace('.' + os.sep, '')
             if i.endswith(".srt"):
                 REMOVALS.append(folders)
             for extension in EXT:
                 if i.endswith(extension):
-                    MOVIES_DIR[folders] = []
+                    if folders not in MOVIES_DIR:
+                        MOVIES_DIR[folders] = []
                     MOVIES_DIR[folders].append(i)
-    print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
+    for i in REMOVALS:
+        try:
+            del(MOVIES_DIR[i])
+        except KeyError:    # Already Removed if one srt file was found in folder
+            pass
+    # print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
 
 
 def get_year(filename):
@@ -54,28 +64,29 @@ def get_year(filename):
     return filename
 
 
-def download_sub():
-    import time
-    start_time = time.time()
+def dir_dl():
+    '''
+    Download subtitles for the movies in a directory.
+    '''
+    # start_time = time.time()
     cwd = os.getcwd()
     for folders, movies in MOVIES_DIR.iteritems():
-        # os.chdir(folders)
+        os.chdir(folders)
         for mov in movies:
-            try:
-                prev, year, removals = mov.partition(get_year(mov))
-                sub_link = subscene.select_title(name=prev.replace('.', ' ').strip(), year=year)
-            except: # Year not found
-                sub_link = subscene.select_title(name=mov)
+            sub_link = subscene.sel_sub('https://subscene.com/subtitles/release?q=' + mov)
+            if not sub_link:
+                try:
+                    prev, year, removals = mov.partition(get_year(mov))
+                    sub_link = subscene.select_title(name=prev.replace('.', ' ').replace('(', ' ').strip(), year=year)
+                except: # Year not found
+                    sub_link = subscene.select_title(name=mov)
+                if sub_link:
+                    for i in subscene.sel_sub(sub_link):
+                        subscene.dl_sub(i)
             if sub_link:
-                for i in subscene.sel_sub(sub_link):
+                for i in sub_link:
                     subscene.dl_sub(i)
+            else:
+                print "Subtitle not found for [%s]" % (mov.capitalize())
         os.chdir(cwd)
-    print("--- Function (DOWNLOAD_SUB) took %s seconds ---" % (time.time() - start_time))
-
-if __name__ == "__main__":
-    create_folder()
-    get_media_files()
-    for i in REMOVALS:
-        del(MOVIES_DIR[i])
-    print MOVIES_DIR
-    # download_sub()
+    # print("--- Function (DOWNLOAD_SUB) took %s seconds ---" % (time.time() - start_time))
