@@ -1,7 +1,6 @@
 import re
 import shutil
 import os
-import zipfile
 import source.subscene as subscene
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
@@ -24,8 +23,9 @@ def create_folder():
                 try:
                     os.mkdir(files.strip(extension))
                     shutil.move(files, files.strip(extension))  # Moves the file to the new folder
-                except OSError:
-                    pass  # If folder exists for the filename
+                except (OSError, IOError):
+                    pass  # If folder exists for the filename or name which
+                          # contains characters out of the ordinal range
 
 
 def get_media_files():
@@ -35,7 +35,6 @@ def get_media_files():
     # start_time = time.time()
     for folders, subfolders, files in os.walk('.'):
         for i in files:
-            # folders = folders.replace('.\\', '')
             folders = folders.replace('.' + os.sep, '')
             if i.endswith(".srt"):
                 REMOVALS.append(folders)
@@ -52,18 +51,6 @@ def get_media_files():
     # print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
 
 
-def get_year(filename):
-    '''Obtains year from the movie filename.
-    For example:-
-    >>> Doctor.Strange.[2016].BrRip.720p.YIFY.mp4
-    gets (2016) from the media file.'''
-    # Searches for FOUR digits in the movie name, if found returns them.
-    year_pattern = re.compile(r'(?!1080|2160)\d{4}')
-    if year_pattern.search(filename):
-        return year_pattern.search(filename).group()
-    return filename
-
-
 def dir_dl():
     '''
     Download subtitles for the movies in a directory.
@@ -72,20 +59,15 @@ def dir_dl():
     cwd = os.getcwd()
     for folders, movies in MOVIES_DIR.iteritems():
         os.chdir(folders)
+        print "Downloading Subtitles for [%s]" % folders
         for mov in movies:
-            sub_link = subscene.sel_sub('https://subscene.com/subtitles/release?q=' + mov)
-            if not sub_link:
-                try:
-                    prev, year, removals = mov.partition(get_year(mov))
-                    sub_link = subscene.select_title(name=prev.replace('.', ' ').replace('(', ' ').strip(), year=year)
-                except: # Year not found
-                    sub_link = subscene.select_title(name=mov)
-                if sub_link:
-                    for i in subscene.sel_sub(sub_link):
-                        subscene.dl_sub(i)
+            sub_link = subscene.select_title(mov, mode="silent")
             if sub_link:
-                for i in sub_link:
-                    subscene.dl_sub(i)
+                if subscene.sel_sub(page=sub_link, name=mov):
+                    for i in subscene.sel_sub(page=sub_link, name=mov):
+                        subscene.dl_sub(i)
+                else:
+                    print "Subtitle not found for [%s]" % (mov.capitalize())
             else:
                 print "Subtitle not found for [%s]" % (mov.capitalize())
         os.chdir(cwd)

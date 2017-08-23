@@ -8,7 +8,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dir', default = '.', help = 'Specify directory to work in')
     parser.add_argument('-m', '--movie-name', nargs='+', help = 'Provide Movie Name')
-    parser.add_argument('-y', '--movie-year', help = 'Provide Movie Year for better precision.')
+    parser.add_argument('-s', '--silent', help = 'Silent mode.')
     args = parser.parse_args()
 
     if args.movie_name:
@@ -35,6 +35,7 @@ def main():
         sub_link = subscene.select_title(name=args.movie_name.replace(' ', '.'), mode="prompt")
         for i in subscene.sel_sub(sub_link):
             subscene.dl_sub(i)
+
     else:
         print 'Incorrect Arguments Specified.'
 
