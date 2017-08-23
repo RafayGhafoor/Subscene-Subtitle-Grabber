@@ -5,7 +5,7 @@ import timeit
 import bs4
 import zipfile
 import os
-os.chdir("N:\Rafay\Anime\Anime Movies")
+# os.chdir("N:\Rafay\Anime\Anime Movies")
 SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {
 "AR" : "Arabic",
