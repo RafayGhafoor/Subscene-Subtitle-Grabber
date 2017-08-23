@@ -3,32 +3,34 @@ import requests
 import re
 import timeit
 import bs4
+import zipfile
+import os
 
-SUB_QUERY = "https://subscene.com/subtitles/title"
-SUB_QUERY_REL = "https://subscene.com/subtitles/release?q="
+SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {
-"AR" : "arabic",
-"BU" : "burmese",
-"DA" : "danish",
-"DU" : "dutch",
-"EN" : "english",
-"FA" : "farsi_persian",
-"IN" : "indonesian",
-"IT" : "italian",
-"MA" : "malay",
-"SP" : "spanish",
-"VI" : "vietnamese"
+"AR" : "Arabic",
+"BU" : "Burmese",
+"DA" : "Danish",
+"DU" : "Dutch",
+"EN" : "English",
+"FA" : "Farsi_persian",
+"IN" : "Indonesian",
+"IT" : "Italian",
+"MA" : "Malay",
+"SP" : "Spanish",
+"VI" : "Vietnamese"
 }
+
 DEFAULT_LANG = LANGUAGE["EN"]
 
 
 def scrape_page(url, parameter=''):
     '''Allows you to get content from a url.'''
     if parameter:
-        req = requests.get(url, {'q': parameter})
+        req = requests.get(url, params={'q': parameter})
     else:
         req = requests.get(url)
-    # print 'Generated URL is ---> %r\n' % r.url
+    # print 'Generated URL is ---> %r\n' % req.url
     req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
@@ -42,44 +44,8 @@ def zip_extractor(name):
             # print ZipFile.infolist()
             z.extractall(".")
         os.remove(name)
-    except:
+    except Exception as e:
         pass
-
-
-def silent_mode(title_name, name='', year=''):
-    '''
-    An automatic mode for selecting media title from subscene site.
-    :param title_name: title names obtained from get_title function.
-    '''
-
-    def html_navigator(category="Popular"):
-        '''
-        Navigates html tree and select title from it. This function is
-        called twice. For example, the default (Popular) category for
-        searching in is Popular. It will search title first in popular
-        category and then in other categories. If default category
-        changes, this process is reversed.
-        :param category: selects which category should be searched first in
-        the html tree.
-        '''
-        popular = title_name.find("h2", {"class": "popular"})
-        if category == "Popular": # Searches in Popular Category and the categories next to it.
-            section = popular.find_all_next("div", {"class": "title"})
-        else: # Searches in categories above popular tag.
-            section = title_name.find_all("div", {"class": "title"})
-        for results in section:
-            match = 1
-            for letter in name.split():
-                if letter.lower() in results.a.text.lower() and year in results.a.text.lower():
-                    if len(name.split()) == match:
-                        return "https://subscene.com" + results.a.get("href") + "/" + DEFAULT_LANG
-                    match += 1
-
-    # Searches first in Popular category, if found, returns the title name
-    obt_link = html_navigator(category="Popular")
-    if not obt_link:    # If not found in the popular category, searches in other category
-        return html_navigator(category="other_than_popular")
-    return obt_link
 
 
 def cli_mode(titles_name):
@@ -102,7 +68,7 @@ def cli_mode(titles_name):
     return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
 
-def select_title(name='', year='', mode=1):
+def select_title(name='', year='', mode="prompt"):
     '''
     Select title of the media (i.e., Movie, TV-Series)
     :param title_lst: Title Names from the function get_title
@@ -116,9 +82,14 @@ def select_title(name='', year='', mode=1):
 
     soup = scrape_page(url=SUB_QUERY, parameter=name)
     try:
-        if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
-            print "Sorry, the subtitles for this media file aren't available."
-            return
+        if soup.find("div", {"class": "byTitle"}):
+            if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
+                print "Sorry, the subtitles for this media file aren't available."
+                return
+
+        elif not soup.find("div", {"class": "byTitle"}):
+            return SUB_QUERY + '?q=' + name.replace(' ', '.')
+
     except AttributeError:
         # print name, year
         return
@@ -126,11 +97,9 @@ def select_title(name='', year='', mode=1):
     title_lst = soup.findAll("div", {"class": "search-result"})
     for titles in title_lst:
         popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
-        if mode == 1:
-            title_link = silent_mode(titles, name=name, year=year)
-            return title_link
-        else:
+        if mode == "prompt":
             return cli_mode(titles)
+
 
 # Select Subtitles
 def sel_sub(page, sub_count=1):
@@ -145,7 +114,7 @@ def sel_sub(page, sub_count=1):
     for link in soup.find_all('td', {'class': 'a1'}):
         link = link.find('a')
         if active_sub < sub_count and 'Trailer' not in link.text\
-                        and link.get('href') not in sub_list:
+                        and link.get('href') not in sub_list and DEFAULT_LANG in link.text:
             sub_list.append(link.get('href'))
             active_sub += 1
     # print("--- sel_sub took %s seconds ---" % (time.time() - start_time))
