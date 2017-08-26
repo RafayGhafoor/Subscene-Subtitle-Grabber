@@ -1,9 +1,13 @@
 # Subtitles Downloader:
-This program makes your **Subtitles Search** easier by automating the process.
+This program makes your **Subtitles Search and Download** easier by automating the process.
 
 # Status:
 
 - Alpha Release.
+
+# Preview:
+
+[![asciicast](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT.png)](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT)
 
 # Usage:
 
