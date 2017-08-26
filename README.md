@@ -17,7 +17,7 @@ This program makes your **Subtitles Search and Download** easier by automating t
 >>> python main.py -m Movie_Name
 ```
 
-```python
+```
 usage: main.py [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
 
 optional arguments:
