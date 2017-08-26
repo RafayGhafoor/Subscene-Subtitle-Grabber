@@ -3,19 +3,31 @@ This program makes your **Subtitles Search** easier by automating the process.
 
 # Status:
 
-- Alpha.
+- Alpha Release.
 
 # Usage:
 
 **For Custom Movie Subtitle Download:-**
 
 ```python
->>> python SubsceneDL.py -m Movie_Name
+>>> python main.py -m Movie_Name
+```
+
+```python
+usage: main.py [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DIR, --dir DIR     Specify directory to work in
+  -m MOVIE_NAME [MOVIE_NAME ...], --movie-name MOVIE_NAME [MOVIE_NAME ...]
+                        Provide Movie Name
+  -s, --silent          Silent mode.
 ```
 
 # Features:
 
 - Allows you to download subtitles for movies by specifying movie name and year (optional).
+- Allows you to download subtitles for media files in a specified directory.
 
 # Requirements:
 
