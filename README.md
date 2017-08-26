@@ -3,7 +3,7 @@ This program makes your **Subtitles Search** easier by automating the process.
 
 # Status:
 
-- Under Development.
+- Alpha.
 
 # Usage:
 
@@ -25,7 +25,7 @@ This program makes your **Subtitles Search** easier by automating the process.
 
 # Features:
 
-- Allows you to download subtitles for movies by specifying movie name and year (optional).
+- Allows you to download subtitles for movies by specifying movie name.
 
 # Requirements:
 
