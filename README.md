@@ -12,7 +12,6 @@ This program makes your **Subtitles Search** easier by automating the process.
 ```python
 >>> python SubsceneDL.py -m Movie_Name
 ```
-<<<<<<< HEAD
 
 # Features:
 
@@ -23,8 +22,6 @@ This program makes your **Subtitles Search** easier by automating the process.
 - Python 2.7
 - Requests
 - Beautiful Soup
-
-=======
 
 # Features:
 
@@ -50,5 +47,3 @@ This program makes your **Subtitles Search** easier by automating the process.
 - [X] Different search algorithms implementation for precise results. 
 - [ ] Integrating script with torrent clients.
 - [X] Improving CLI Mode by displaying the menu according to the site.
-
->>>>>>> dev
