@@ -61,7 +61,7 @@ def dir_dl():
         os.chdir(folders)
         print "Downloading Subtitles for [%s]" % folders
         for mov in movies:
-            sub_link = subscene.select_title(mov, mode="silent")
+            sub_link = subscene.select_title(mov)
             if sub_link:
                 if subscene.sel_sub(page=sub_link, name=mov):
                     for i in subscene.sel_sub(page=sub_link, name=mov):

@@ -72,7 +72,7 @@ def silent_mode(title_name, name='', year=''):
          match = 1
          for letter in name.split():
              if letter.lower() in results.a.text.lower():
-                 print "NAME: %s, RESULT: %s, MATCH: %s" % (letter, results.a.text, match)
+                #  print "NAME: %s, RESULT: %s, MATCH: %s" % (letter, results.a.text, match)
                  if match == len(name.split()):
                      return "https://subscene.com" + results.a.get("href") + "/" + DEFAULT_LANG
                  match += 1
@@ -98,9 +98,11 @@ def cli_mode(titles_name):
         titles_and_links[title_text] = x.a.get("href")
         print "(%s): %s" % (i, title_text.encode("ascii", "ignore"))
         media_titles.append(title_text)
-
-    qs = int(raw_input("\nPlease Enter Movie Number: "))
-    return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
+    try:
+        qs = int(raw_input("\nPlease Enter Movie Number: "))
+        return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
+    except:
+        return
 
 
 def select_title(name='', year=''):

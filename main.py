@@ -25,8 +25,8 @@ def main():
             os.chdir(args.dir)
             directory.get_media_files()
             directory.dir_dl()
-        except:
-            print 'Invalid Directory Input.'
+        except Exception as e:
+            print 'Invalid Directory Input.', e
 
     elif args.dir == '.' and not args.movie_name:
         # Searches for movies in specified directory.
