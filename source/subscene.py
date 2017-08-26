@@ -5,7 +5,7 @@ import timeit
 import bs4
 import zipfile
 import os
-os.chdir("N:\Rafay\Anime\Anime Movies")
+# os.chdir("N:\Rafay\Anime\Anime Movies")
 SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {
 "AR" : "Arabic",
@@ -20,7 +20,7 @@ LANGUAGE = {
 "SP" : "Spanish",
 "VI" : "Vietnamese"
 }
-
+MODE = "prompt"
 DEFAULT_LANG = LANGUAGE["EN"]
 
 
@@ -71,11 +71,11 @@ def silent_mode(title_name, name='', year=''):
      for results in section:
          match = 1
          for letter in name.split():
-             if letter.lower() in results.a.text.lower() and year in results.a.text.lower():
-                 if len(name.split()) == match:
+             if letter.lower() in results.a.text.lower():
+                 print "NAME: %s, RESULT: %s, MATCH: %s" % (letter, results.a.text, match)
+                 if match == len(name.split()):
                      return "https://subscene.com" + results.a.get("href") + "/" + DEFAULT_LANG
                  match += 1
-
     # Searches first in Popular category, if found, returns the title name
     obt_link = html_navigator(category="Popular")
     if not obt_link:    # If not found in the popular category, searches in other category
@@ -103,7 +103,7 @@ def cli_mode(titles_name):
     return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
 
-def select_title(name='', year='', mode="prompt"):
+def select_title(name='', year=''):
     '''
     Select title of the media (i.e., Movie, TV-Series)
     :param title_lst: Title Names from the function get_title
@@ -132,10 +132,10 @@ def select_title(name='', year='', mode="prompt"):
     title_lst = soup.findAll("div", {"class": "search-result"})
     for titles in title_lst:
         popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
-        if mode == "prompt":
+        if MODE == "prompt":
             return cli_mode(titles)
         else:
-            silent_mode(titles)
+            return silent_mode(titles, name=name.replace('.', ' '))
 
 
 # Select Subtitles
