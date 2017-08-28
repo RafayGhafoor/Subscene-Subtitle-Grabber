@@ -31,10 +31,12 @@ optional arguments:
 
 # Examples:
 
-`subgrab -m Doctor Strange  # For custom movie subtitle download`
-`subgrab -m Doctor Strange -s  # Silent mode (No prompts i.e., title selection (if not found))`
-`subgrab  # To run in current working directory`
-`subgrab -d DIRECTORY_PATH  # For specific directory`
+```python
+subgrab -m Doctor Strange  # For custom movie subtitle download
+subgrab -m Doctor Strange -s  # Silent mode (No prompts i.e., title selection (if not found))
+subgrab  # To run in current working directory
+subgrab -d DIRECTORY_PATH  # For specific directory
+```
 
 # Features:
 
