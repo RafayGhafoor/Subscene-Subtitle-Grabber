@@ -6,9 +6,10 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--dir', default = '.', help = 'Specify directory to work in')
-    parser.add_argument('-m', '--movie-name', nargs='+', help = 'Provide Movie Name')
-    parser.add_argument('-s', '--silent', action='store_true', help = 'Silent mode.')
+    parser.add_argument('-d', '--dir', default='.', help='Specify directory to work in')
+    parser.add_argument('-m', '--movie-name', nargs='+', help='Provide Movie Name')
+    parser.add_argument('-s', '--silent', action='store_true', help='Silent mode.')
+    parser.add_argument('-c', '--count', default=1, help='Number of subtitles to be downloaded.')
     args = parser.parse_args()
 
     if args.silent:
@@ -32,13 +33,13 @@ def main():
         # Searches for movies in specified directory.
         directory.create_folder()
         directory.get_media_files()
-        directory.dir_dl()
+        directory.dir_dl(sub_count=int(args.count))
 
     elif args.movie_name:
         sub_link = subscene.select_title(name=args.movie_name.replace(' ', '.'))
         # print sub_link
         if sub_link:
-            for i in subscene.sel_sub(sub_link):
+            for i in subscene.sel_sub(page=sub_link, sub_count=int(args.count)):
                 subscene.dl_sub(i)
 
     else:

@@ -51,7 +51,7 @@ def get_media_files():
     # print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
 
 
-def dir_dl():
+def dir_dl(sub_count=1):
     '''
     Download subtitles for the movies in a directory.
     '''
@@ -64,7 +64,7 @@ def dir_dl():
             sub_link = subscene.select_title(mov)
             if sub_link:
                 if subscene.sel_sub(page=sub_link, name=mov):
-                    for i in subscene.sel_sub(page=sub_link, name=mov):
+                    for i in subscene.sel_sub(page=sub_link, sub_count=sub_count, name=mov):
                         subscene.dl_sub(i)
                 else:
                     print "Subtitle not found for [%s]" % (mov.capitalize())
