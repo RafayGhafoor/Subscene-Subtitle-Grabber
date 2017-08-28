@@ -5,6 +5,10 @@ This program makes your subtitles **Search and Download** easier by automating t
 
 - Beta Release.
 
+# Installation:
+
+`pip install subgrab`
+
 # Preview:
 
 [![asciicast](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT.png)](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT)
@@ -14,11 +18,11 @@ This program makes your subtitles **Search and Download** easier by automating t
 **For Custom Movie Subtitle Download:-**
 
 ```python
->>> python main.py -m Movie_Name
+>>> subgrab -m Movie_Name
 ```
 
 ```
-usage: main.py [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
+usage: subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
 
 optional arguments:
   -h, --help            show this help message and exit
