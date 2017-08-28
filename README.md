@@ -36,6 +36,10 @@ optional arguments:
 
 `subgrab -m Doctor Strange -s`
 
+- **To run in current working directory**
+
+`subgrab`
+
 - **For specific directory**
 
 `subgrab -d DIRECTORY_PATH`
