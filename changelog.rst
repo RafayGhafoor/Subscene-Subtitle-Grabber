@@ -1,5 +1,5 @@
 ==============
-PyPT Changelog
+Sub-Grab Changelog
 ==============
 :Info: Changelog for sub-grab project.
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
