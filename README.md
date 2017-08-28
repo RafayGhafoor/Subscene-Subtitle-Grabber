@@ -39,16 +39,6 @@ optional arguments:
 - Requests
 - Beautiful Soup
 
-# Features:
-
-- Allows you to download subtitles for movies by specifying movie name.
-
-# Requirements:
-
-- Python 2.7
-- Requests
-- Beautiful Soup
-
 # TODO:
 
 - [x] Adding support for more languages.
