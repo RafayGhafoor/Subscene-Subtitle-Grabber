@@ -5,6 +5,10 @@ This program makes your subtitles **Search and Download** easier by automating t
 
 - Beta Release.
 
+# Installation:
+
+`pip install subgrab`
+
 # Preview:
 
 [![asciicast](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT.png)](https://asciinema.org/a/VfwNmIMiqmjVuku02FEUiImAT)
