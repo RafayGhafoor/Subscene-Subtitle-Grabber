@@ -15,12 +15,6 @@ This program makes your subtitles **Search and Download** easier by automating t
 
 # Usage:
 
-**For Custom Movie Subtitle Download:-**
-
-```python
->>> subgrab -m Movie_Name
-```
-
 ```
 usage: subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
 
@@ -31,6 +25,20 @@ optional arguments:
                         Provide Movie Name
   -s, --silent          Silent mode.
 ```
+
+# Examples:
+
+**For custom movie subtitle download:-**
+
+`subgrab -m Doctor Strange`
+
+**Silent mode (No prompts i.e., title selection (if not found))** 
+
+`subgrab -m Doctor Strange -s`
+
+**For specific directory**
+
+`subgrab -d DIRECTORY_PATH`
 
 # Features:
 
