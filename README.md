@@ -20,29 +20,21 @@ usage: subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
 
 optional arguments:
   -h, --help            show this help message and exit
+  
   -d DIR, --dir DIR     Specify directory to work in
+  
   -m MOVIE_NAME [MOVIE_NAME ...], --movie-name MOVIE_NAME [MOVIE_NAME ...]
                         Provide Movie Name
+                        
   -s, --silent          Silent mode.
 ```
 
 # Examples:
 
-- **For custom movie subtitle download:-**
-
-`subgrab -m Doctor Strange`
-
-- **Silent mode (No prompts i.e., title selection (if not found))** 
-
-`subgrab -m Doctor Strange -s`
-
-- **To run in current working directory**
-
-`subgrab`
-
-- **For specific directory**
-
-`subgrab -d DIRECTORY_PATH`
+`subgrab -m Doctor Strange  # For custom movie subtitle download`
+`subgrab -m Doctor Strange -s  # Silent mode (No prompts i.e., title selection (if not found))`
+`subgrab  # To run in current working directory`
+`subgrab -d DIRECTORY_PATH  # For specific directory`
 
 # Features:
 
