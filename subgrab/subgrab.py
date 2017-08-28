@@ -43,7 +43,3 @@ def main():
 
     else:
         print 'Incorrect Arguments Specified.'
-
-
-if __name__ == "__main__":
-    main()
