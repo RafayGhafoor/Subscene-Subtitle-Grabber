@@ -28,15 +28,15 @@ optional arguments:
 
 # Examples:
 
-**For custom movie subtitle download:-**
+- **For custom movie subtitle download:-**
 
 `subgrab -m Doctor Strange`
 
-**Silent mode (No prompts i.e., title selection (if not found))** 
+- **Silent mode (No prompts i.e., title selection (if not found))** 
 
 `subgrab -m Doctor Strange -s`
 
-**For specific directory**
+- **For specific directory**
 
 `subgrab -d DIRECTORY_PATH`
 
