@@ -17,15 +17,18 @@ A script that allows you to download subtitles for TV-Series, Anime and Movies f
 # Usage:
 
 ```
-Usage: subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
+Usage: 
 
-optional arguments:
-  -h, --help            show this help message and exit
+subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
+
+Options:
+
+  -h, --help            Show this help message and exit.
   
-  -d DIR, --dir DIR     Specify directory to work in
+  -d DIR, --dir DIR     Specify directory to work in.
   
   -m MOVIE_NAME [MOVIE_NAME ...], --movie-name MOVIE_NAME [MOVIE_NAME ...]
-                        Provide Movie Name
+                        Provide Movie Name.
                         
   -s, --silent          Silent mode.
 ```
@@ -34,8 +37,11 @@ optional arguments:
 
 ```python
 subgrab                         # To run in current working directory.
+
 subgrab -m Doctor Strange       # For custom movie subtitle download.
+
 subgrab -m Doctor Strange -s    # Silent mode (No prompts i.e., title selection [if not found]).
+
 subgrab -d DIRECTORY_PATH       # For specific directory.
 ```
 
@@ -53,7 +59,7 @@ subgrab -d DIRECTORY_PATH       # For specific directory.
 
 # Requirements:
 
-- Python 2.7
+- Python v2.7
 - Requests
 - Beautiful Soup
 
