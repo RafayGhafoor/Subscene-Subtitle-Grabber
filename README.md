@@ -1,9 +1,9 @@
 # Subtitles Downloader:
-This program makes your **Subtitles Search and Download** easier by automating the process.
+This program makes your subtitles **Search and Download** easier by automating the process.
 
 # Status:
 
-- Alpha Release.
+- Beta Release.
 
 # Preview:
 
