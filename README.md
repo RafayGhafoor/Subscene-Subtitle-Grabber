@@ -36,20 +36,26 @@ Options:
 # Examples:
 
 ```python
-subgrab                         # To run in current working directory.
+subgrab                             # To run in current working directory.
 
-subgrab -m Doctor Strange       # For custom movie subtitle download.
+subgrab -m Doctor Strange           # For custom movie subtitle download.
 
-subgrab -m Doctor Strange -s    # Silent mode (No prompts i.e., title selection [if not found]).
+subgrab -m Doctor Strange -s        # Silent mode (No prompts i.e., title selection [if not found]).
 
-subgrab -d DIRECTORY_PATH       # For specific directory.
+subgrab -d DIRECTORY_PATH           # For specific directory.
+
+subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters of the language).
+
+subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 ```
 
 # Features:
 
 - Two Mode (CLI and Silent inside individual media downloading [-m]) - CLI mode is executed when the title (provided i.e. media name) is not recognized by the site. Mostly when year is not provied (when two or more media names collide). Silent mode is usually executed when year is provided in the argument. Optional, you can also specify silent mode argument - which forces to download subtitles without title selection prompt. The media argument (-m) followed by the silent mode (-s) argument forces silent mode.
 
-- Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in version 0.1).
+- Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in v0.2).
+
+- Added multiple languages support (v0.2).
 
 - Allows you to download subtitles for movies by specifying movie name and year (optional).
 
