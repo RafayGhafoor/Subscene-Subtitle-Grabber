@@ -2,7 +2,7 @@ import os
 import directory
 import source.subscene as subscene
 import argparse
-
+import sys
 
 def main():
     parser = argparse.ArgumentParser()
@@ -20,7 +20,7 @@ def main():
         if len(args.lang) == 2:
             subscene.DEFAULT_LANG = subscene.LANGUAGE[args.lang.upper()]
         else:
-            print "Invalid language specified."
+            sys.exit("Invalid language specified.")
 
     if args.dir != '.':
         # Searches for movies in current directory.
