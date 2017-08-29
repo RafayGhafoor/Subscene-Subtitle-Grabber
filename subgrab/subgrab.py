@@ -17,7 +17,10 @@ def main():
         subscene.MODE = "silent"
 
     if args.lang:
-        subscene.DEFAULT_LANG = subscene.LANGUAGE[args.lang]
+        if len(args.lang) == 2:
+            subscene.DEFAULT_LANG = subscene.LANGUAGE[args.lang.upper()]
+        else:
+            print "Invalid language specified."
 
     if args.dir != '.':
         # Searches for movies in current directory.
