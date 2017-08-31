@@ -16,20 +16,6 @@ A script that allows you to download subtitles for TV-Series, Anime and Movies f
 
 # Usage:
 
-
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -d DIR, --dir DIR     Specify directory to work in.
-  -m MEDIA_NAME [MEDIA_NAME ...], --media-name MEDIA_NAME [MEDIA_NAME ...]
-                        Provide movie name.
-  -s, --silent          Silent mode.
-
-  -c COUNT, --count COUNT
-                        Number of subtitles to be downloaded.
-
-  -l LANG, --lang LANG  Change language.
-
 ```
 Usage:
 
