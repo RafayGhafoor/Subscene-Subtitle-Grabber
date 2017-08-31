@@ -1,6 +1,6 @@
-# Subtitles [Subscene] Grabber (Sub-Grab v0.1):
+# Subtitles [Subscene] Grabber (Sub-Grab v0.2):
 
-A script that allows you to download subtitles for TV-Series, Anime and Movies from subcene site. 
+A script that allows you to download subtitles for TV-Series, Anime and Movies from subcene site.
 
 # Status:
 
@@ -17,20 +17,27 @@ A script that allows you to download subtitles for TV-Series, Anime and Movies f
 # Usage:
 
 ```
-Usage: 
+Usage:
 
-subgrab [-h] [-d DIR] [-m MOVIE_NAME [MOVIE_NAME ...]] [-s]
+subgrab [-h] [-d DIR] [-m MEDIA_NAME [MEDIA_NAME ...]] [-s]
+                   [-c COUNT] [-l LANG]
 
 Options:
 
   -h, --help            Show this help message and exit.
-  
+
   -d DIR, --dir DIR     Specify directory to work in.
-  
+
   -m MOVIE_NAME [MOVIE_NAME ...], --movie-name MOVIE_NAME [MOVIE_NAME ...]
                         Provide Movie Name.
-                        
+
   -s, --silent          Silent mode.
+
+  -c COUNT, --count COUNT
+                        Number of subtitles to be downloaded.
+
+  -l LANG, --lang LANG  Change language.
+
 ```
 
 # Examples:
@@ -80,7 +87,7 @@ subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 - [ ] Use Logging.
 - [X] Optimize Code.
 - [X] Implementation for seasons episodes.
-- [X] Different search algorithms implementation for precise results. 
+- [X] Different search algorithms implementation for precise results.
 - [ ] Integrating script with torrent clients.
 - [X] Improving CLI Mode by displaying the menu according to the site.
 - [ ] Making it compatible with Python 3.

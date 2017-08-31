@@ -1,7 +1,7 @@
 import re
 import shutil
 import os
-import source.subscene as subscene
+import subgrab.source.subscene as subscene
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}  # Contains Movies Directories (keys) and the
