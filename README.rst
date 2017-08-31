@@ -1,4 +1,4 @@
-Subtitles [Subscene] Grabber (Sub-Grab v0.2):
+Subtitles [Subscene] Grabber (Sub-Grab v0.12):
 ==============================================
 
 A script that allows you to download subtitles for TV-Series, Anime and
@@ -77,9 +77,9 @@ Features:
 -  Subtitles count argument added which allows you to download multiple
    subtitles for an individual media. This is useful when the exact
    match is not found and you can download multiple srt files and check
-   them if they are in sync with the media file (integrated in v0.2).
+   them if they are in sync with the media file (integrated in v0.12).
 
--  Added multiple languages support (v0.2).
+-  Added multiple languages support (v0.12).
 
 -  Allows you to download subtitles for movies by specifying movie name
    and year (optional).

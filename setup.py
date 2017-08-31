@@ -10,7 +10,7 @@ def readme():
 
 setup(
     name='subgrab',
-    version='0.2',
+    version='0.12',
     description='A python script for automating subtitles downloading.',
     long_description=readme(),
     url='https://github.com/RafayGhafoor/sub-grab',
