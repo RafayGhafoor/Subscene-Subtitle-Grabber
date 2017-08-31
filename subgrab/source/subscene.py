@@ -24,7 +24,6 @@ MODE = "prompt"
 DEFAULT_LANG = LANGUAGE["EN"]   # Default language in which subtitles
                                 # are downloaded.
 
-
 def scrape_page(url, parameter=''):
     '''
     Retrieve content from a url.
@@ -33,7 +32,6 @@ def scrape_page(url, parameter=''):
         req = requests.get(url, params={'q': parameter})
     else:
         req = requests.get(url)
-    print req.url
     req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
@@ -198,5 +196,5 @@ def dl_sub(page):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace('-', ' '))
-    print "Subtitle (%s) - Downloaded" % name.capitalize()
+    print "Subtitle (%s) - Downloaded" % found_sub.replace('-', ' ').capitalize()
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))
