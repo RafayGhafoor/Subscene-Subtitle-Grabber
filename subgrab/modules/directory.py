@@ -4,8 +4,9 @@ import os
 import source.subscene as subscene
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
-MOVIES_DIR = {}
-REMOVALS = [] # Which already contains subtitles
+MOVIES_DIR = {}  # Contains Movies Directories (keys) and the
+                 # files inside them (values = [list])
+REMOVALS = []  # Which already contains subtitles
 
 
 def create_folder():
@@ -43,6 +44,7 @@ def get_media_files():
                     if folders not in MOVIES_DIR:
                         MOVIES_DIR[folders] = []
                     MOVIES_DIR[folders].append(i)
+    # Directories which contains .srt files (Subtitles)
     for i in REMOVALS:
         try:
             del(MOVIES_DIR[i])
@@ -51,7 +53,7 @@ def get_media_files():
     # print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
 
 
-def dir_dl():
+def dir_dl(sub_count=1):
     '''
     Download subtitles for the movies in a directory.
     '''
@@ -61,10 +63,10 @@ def dir_dl():
         os.chdir(folders)
         print "Downloading Subtitles for [%s]" % folders
         for mov in movies:
-            sub_link = subscene.select_title(mov)
+            sub_link = subscene.sel_title(mov)
             if sub_link:
                 if subscene.sel_sub(page=sub_link, name=mov):
-                    for i in subscene.sel_sub(page=sub_link, name=mov):
+                    for i in subscene.sel_sub(page=sub_link, sub_count=sub_count, name=mov):
                         subscene.dl_sub(i)
                 else:
                     print "Subtitle not found for [%s]" % (mov.capitalize())
