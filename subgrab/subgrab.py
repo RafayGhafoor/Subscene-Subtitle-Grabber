@@ -1,6 +1,6 @@
 import os
-import modules.directory as directory
-import source.subscene as subscene
+import subgrab.modules.directory as directory
+import subgrab.source.subscene as subscene
 import argparse
 import sys
 

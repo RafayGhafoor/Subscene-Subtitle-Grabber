@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
-import pypandoc
 
 def readme():
     with open('README.rst', 'r') as f:
@@ -10,7 +9,7 @@ def readme():
 
 setup(
     name='subgrab',
-    version='0.12',
+    version='0.13',
     description='A python script for automating subtitles downloading.',
     long_description=readme(),
     url='https://github.com/RafayGhafoor/sub-grab',

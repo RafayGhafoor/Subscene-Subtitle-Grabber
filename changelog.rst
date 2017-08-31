@@ -13,6 +13,8 @@ Sub-Grab Changelog
 Version History
 ===============
 
+0.13 / 2017-08-31
+    * Fixed dependencies issue.
 
 0.12 / 2017-08-31
     * Added number of subtitles to be downloaded for a media.
