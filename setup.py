@@ -6,7 +6,7 @@ import pypandoc
 
 setup(
     name='subgrab',
-    version='0.2',
+    version='0.11',
     description='A python script for automating subtitles downloading.',
     long_description=pypandoc.convert(path.join('.', 'README.md'), 'rst'),
     url='https://github.com/RafayGhafoor/sub-grab',
