@@ -1,7 +1,5 @@
-import time
 import requests
 import re
-import timeit
 import bs4
 import zipfile
 import os
@@ -45,7 +43,7 @@ def zip_extractor(name):
             # srt += [i for i in ZipFile.namelist() if i.endswith('.srt')][0]
             z.extractall(".")
         os.remove(name)
-    except Exception as e:
+    except Exception:
         pass
 
 

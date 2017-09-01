@@ -1,7 +1,6 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 # To use a consistent encoding
-from codecs import open
-from os import path
+from codecs import open as openit
 
 def readme():
     with open('README.rst', 'r') as f:
