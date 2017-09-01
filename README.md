@@ -2,6 +2,8 @@
 
 A script that allows you to download subtitles for TV-Series, Anime and Movies from subcene site.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
+
 # Status:
 
 - Beta Release.
