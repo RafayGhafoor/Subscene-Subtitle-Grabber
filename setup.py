@@ -8,10 +8,10 @@ def readme():
 
 setup(
     name='subgrab',
-    version='0.13',
+    version='0.14',
     description='A python script for automating subtitles downloading.',
     long_description=readme(),
-    url='https://github.com/RafayGhafoor/sub-grab',
+    url='https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber',
     author='Rafay Ghafoor',
     author_email='rafayghafoor@protonmail.com',
     packages=['subgrab', 'subgrab.source', 'subgrab.modules'],

@@ -1,6 +1,6 @@
-# Subtitles [Subscene] Grabber (Sub-Grab v0.13):
+# Subtitles [Subscene] Grabber (Sub-Grab v0.14):
 
-A script that allows you to download subtitles for TV-Series, Anime and Movies from subcene site.
+A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
 
@@ -57,6 +57,11 @@ subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters o
 
 subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 ```
+
+# Note:
+
+- (For Windows) To use it from the context menu, paste subtitle.bat file in "shell:sendto" (By typing this in RUN).
+Taken from Manojmj subtitles script.
 
 # Features:
 

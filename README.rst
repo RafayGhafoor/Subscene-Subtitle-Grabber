@@ -1,8 +1,8 @@
-Subtitles [Subscene] Grabber (Sub-Grab v0.13):
+Subtitles [Subscene] Grabber (Sub-Grab v0.14):
 ==============================================
 
 A script that allows you to download subtitles for TV-Series, Anime and
-Movies from subcene site.
+Movies from subscene site.
 
 Status:
 =======
