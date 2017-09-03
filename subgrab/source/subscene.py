@@ -1,7 +1,5 @@
-import time
 import requests
 import re
-import timeit
 import bs4
 import zipfile
 import os

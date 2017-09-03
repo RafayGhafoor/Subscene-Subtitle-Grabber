@@ -1,4 +1,3 @@
-import re
 import shutil
 import os
 import subgrab.source.subscene as subscene
@@ -34,7 +33,7 @@ def get_media_files():
     Obtains media files from the current/specified directory.
     '''
     # start_time = time.time()
-    for folders, subfolders, files in os.walk('.'):
+    for folders, _, files in os.walk('.'):
         for i in files:
             folders = folders.replace('.' + os.sep, '')
             if i.endswith(".srt"):
