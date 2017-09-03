@@ -44,6 +44,7 @@ def zip_extractor(name):
             z.extractall(".")
         os.remove(name)
     except Exception as e:
+        print "filename already exists: ", e
         pass
 
 
@@ -104,7 +105,8 @@ def cli_mode(titles_name, category):
         qs = int(raw_input("\nPlease Enter Movie Number: "))
         return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
-    except:
+    except Exception as e:
+        print "Movie Skipped - ", e
         # If pressed Enter, movie is skipped.
         return
 
