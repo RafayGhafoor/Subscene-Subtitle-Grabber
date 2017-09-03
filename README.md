@@ -98,3 +98,4 @@ Taken from Manojmj subtitles script.
 - [ ] Integrating script with torrent clients.
 - [X] Improving CLI Mode by displaying the menu according to the site.
 - [ ] Making it compatible with Python 3.
+- [ ] Adding scoring for subtitle selecting and sorting the list according to scores.
