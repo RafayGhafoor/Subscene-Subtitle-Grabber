@@ -1,5 +1,7 @@
+import time
 import requests
 import re
+import timeit
 import bs4
 import zipfile
 import os
@@ -43,7 +45,7 @@ def zip_extractor(name):
             # srt += [i for i in ZipFile.namelist() if i.endswith('.srt')][0]
             z.extractall(".")
         os.remove(name)
-    except Exception:
+    except Exception as e:
         pass
 
 
@@ -163,17 +165,26 @@ def sel_sub(page, sub_count=1, name=""):
     active_sub = 0
     for link in soup.find_all('td', {'class': 'a1'}):
         link = link.find('a')
-        if active_sub < sub_count and 'Trailer' not in link.text\
+        if active_sub < sub_count and 'trailer' not in link.text.lower()\
                         and link.get('href') not in sub_list and\
                         DEFAULT_LANG in link.text:
+            # if movie = Doctor.Strange.2016, this first condition is not
+            # going to be executed because the length of the list will be 0
+            # we format the name by replacing dots with spaces, which will
+            # split it into the length of the list of two elements (0,1,2)
+            formatted_name = name.replace('.', ' ').split()
             if len(name.split()) > 1:
                 if name.split()[1].lower() in link.text.lower() or \
-                                    name.split()[0].lower() in link.text.lower():
+                        name.split()[0].lower() in link.text.lower():
                     sub_list.append(link.get('href'))
                     active_sub += 1
-            else:
-                sub_list.append(link.get('href'))
-                active_sub += 1
+
+            elif len(formatted_name) > 1:
+                if formatted_name[0].lower() in link.text.lower() or \
+                        formatted_name[1].lower() in link.text.lower():
+                    sub_list.append(link.get('href'))
+                    active_sub += 1
+
     # print("--- sel_sub took %s seconds ---" % (time.time() - start_time))
     return ['https://subscene.com' + i for i in sub_list]
 
