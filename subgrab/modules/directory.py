@@ -1,7 +1,6 @@
-import re
 import shutil
 import os
-import source.subscene as subscene
+import subgrab.source.subscene as subscene
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}  # Contains Movies Directories (keys) and the
@@ -34,7 +33,7 @@ def get_media_files():
     Obtains media files from the current/specified directory.
     '''
     # start_time = time.time()
-    for folders, subfolders, files in os.walk('.'):
+    for folders, _, files in os.walk('.'):
         for i in files:
             folders = folders.replace('.' + os.sep, '')
             if i.endswith(".srt"):

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # Subtitles [Subscene] Grabber (Sub-Grab v0.11):
+=======
+# Subtitles [Subscene] Grabber (Sub-Grab v0.14):
+>>>>>>> master
 
-A script that allows you to download subtitles for TV-Series, Anime and Movies from subcene site.
+A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
 
 # Status:
 
@@ -56,13 +62,18 @@ subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters o
 subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 ```
 
+# Note:
+
+- (For Windows) To use it from the context menu, paste subtitle.bat file in "shell:sendto" (By typing this in RUN).
+Taken from Manojmj subtitles script.
+
 # Features:
 
 - Two Mode (CLI and Silent inside individual media downloading [-m]) - CLI mode is executed when the title (provided i.e. media name) is not recognized by the site. Mostly when year is not provied (when two or more media names collide). Silent mode is usually executed when year is provided in the argument. Optional, you can also specify silent mode argument - which forces to download subtitles without title selection prompt. The media argument (-m) followed by the silent mode (-s) argument forces silent mode.
 
-- Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in v0.2).
+- Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in v0.12).
 
-- Added multiple languages support (v0.2).
+- Added multiple languages support (v0.12).
 
 - Allows you to download subtitles for movies by specifying movie name and year (optional).
 
@@ -91,3 +102,4 @@ subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 - [ ] Integrating script with torrent clients.
 - [X] Improving CLI Mode by displaying the menu according to the site.
 - [ ] Making it compatible with Python 3.
+- [ ] Adding scoring for subtitle selecting and sorting the list according to scores.

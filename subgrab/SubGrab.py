@@ -1,6 +1,6 @@
 import os
-import modules.directory as directory
-import source.subscene as subscene
+import subgrab.modules.directory as directory
+import subgrab.source.subscene as subscene
 import argparse
 import sys
 
@@ -48,7 +48,7 @@ def main():
         sub_link = subscene.sel_title(name=args.media_name.replace(' ', '.'))
         # print sub_link
         if sub_link:
-            for i in subscene.sel_sub(page=sub_link, sub_count=args.count):
+            for i in subscene.sel_sub(page=sub_link, sub_count=args.count, name=args.media_name):
                 subscene.dl_sub(i)
 
     else:

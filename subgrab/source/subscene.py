@@ -1,7 +1,5 @@
-import time
 import requests
 import re
-import timeit
 import bs4
 import zipfile
 import os
@@ -24,7 +22,6 @@ MODE = "prompt"
 DEFAULT_LANG = LANGUAGE["EN"]   # Default language in which subtitles
                                 # are downloaded.
 
-
 def scrape_page(url, parameter=''):
     '''
     Retrieve content from a url.
@@ -33,7 +30,6 @@ def scrape_page(url, parameter=''):
         req = requests.get(url, params={'q': parameter})
     else:
         req = requests.get(url)
-    print req.url
     req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
@@ -48,6 +44,7 @@ def zip_extractor(name):
             z.extractall(".")
         os.remove(name)
     except Exception as e:
+        print "filename already exists: ", e
         pass
 
 
@@ -108,7 +105,8 @@ def cli_mode(titles_name, category):
         qs = int(raw_input("\nPlease Enter Movie Number: "))
         return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
-    except:
+    except Exception as e:
+        print "Movie Skipped - ", e
         # If pressed Enter, movie is skipped.
         return
 
@@ -167,17 +165,26 @@ def sel_sub(page, sub_count=1, name=""):
     active_sub = 0
     for link in soup.find_all('td', {'class': 'a1'}):
         link = link.find('a')
-        if active_sub < sub_count and 'Trailer' not in link.text\
+        if active_sub < sub_count and 'trailer' not in link.text.lower()\
                         and link.get('href') not in sub_list and\
                         DEFAULT_LANG in link.text:
+            # if movie = Doctor.Strange.2016, this first condition is not
+            # going to be executed because the length of the list will be 0
+            # we format the name by replacing dots with spaces, which will
+            # split it into the length of the list of two elements (0,1,2)
+            formatted_name = name.replace('.', ' ').split()
             if len(name.split()) > 1:
                 if name.split()[1].lower() in link.text.lower() or \
-                                    name.split()[0].lower() in link.text.lower():
+                        name.split()[0].lower() in link.text.lower():
                     sub_list.append(link.get('href'))
                     active_sub += 1
-            else:
-                sub_list.append(link.get('href'))
-                active_sub += 1
+
+            elif len(formatted_name) > 1:
+                if formatted_name[0].lower() in link.text.lower() or \
+                        formatted_name[1].lower() in link.text.lower():
+                    sub_list.append(link.get('href'))
+                    active_sub += 1
+
     # print("--- sel_sub took %s seconds ---" % (time.time() - start_time))
     return ['https://subscene.com' + i for i in sub_list]
 
@@ -198,5 +205,5 @@ def dl_sub(page):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace('-', ' '))
-    print "Subtitle (%s) - Downloaded" % name.capitalize()
+    print "Subtitle (%s) - Downloaded" % found_sub.replace('-', ' ').capitalize()
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))

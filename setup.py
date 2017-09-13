@@ -1,18 +1,18 @@
-from setuptools import setup, find_packages
-# To use a consistent encoding
-from codecs import open
-from os import path
-import pypandoc
+from setuptools import setup
+
+def readme():
+    with open('README.rst', 'r') as f:
+        return f.read()
 
 setup(
     name='subgrab',
-    version='0.11',
+    version='0.14',
     description='A python script for automating subtitles downloading.',
-    long_description=pypandoc.convert(path.join('.', 'README.md'), 'rst'),
-    url='https://github.com/RafayGhafoor/sub-grab',
+    long_description=readme(),
+    url='https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber',
     author='Rafay Ghafoor',
     author_email='rafayghafoor@protonmail.com',
-    packages=['subgrab', 'subgrab.source'],
+    packages=['subgrab', 'subgrab.source', 'subgrab.modules'],
     entry_points = {'console_scripts': ['subgrab = subgrab.__main__:main']},
     zip_safe = False,
     license='GPL',
