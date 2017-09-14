@@ -1,13 +1,13 @@
-import re
 import shutil
 import os
-import source.subscene as subscene
+import subgrab.source.subscene as subscene
+import logging
+logger = logging.getLogger("directory.py")
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
 ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}  # Contains Movies Directories (keys) and the
                  # files inside them (values = [list])
 REMOVALS = []  # Which already contains subtitles
-
 
 def create_folder():
     '''
@@ -22,10 +22,12 @@ def create_folder():
             if files.endswith(extension):
                 # Creates a folder of same name as file (excluding file extension)
                 try:
+                    logger.info("Moved to folder: %s" % (files.strip(extension)))
                     os.mkdir(files.strip(extension))
                     shutil.move(files, files.strip(extension))  # Moves the file to the new folder
                 except (OSError, IOError):
-                    pass  # If folder exists for the filename or name which
+                    logger.debug("Cannot create folder for: %s" % (files.strip(extension)))
+                          # If folder exists for the filename or name which
                           # contains characters out of the ordinal range
 
 
@@ -34,7 +36,7 @@ def get_media_files():
     Obtains media files from the current/specified directory.
     '''
     # start_time = time.time()
-    for folders, subfolders, files in os.walk('.'):
+    for folders, _, files in os.walk('.'):
         for i in files:
             folders = folders.replace('.' + os.sep, '')
             if i.endswith(".srt"):
