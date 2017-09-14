@@ -6,7 +6,7 @@ def readme():
 
 setup(
     name='subgrab',
-    version='0.14',
+    version='0.15',
     description='A python script for automating subtitles downloading.',
     long_description=readme(),
     url='https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber',

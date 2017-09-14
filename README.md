@@ -1,4 +1,4 @@
-# Subtitles [Subscene] Grabber (Sub-Grab v0.14):
+# Subtitles [Subscene] Grabber (Sub-Grab v0.15):
 
 A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
 
@@ -51,7 +51,7 @@ subgrab -m Doctor Strange           # For custom movie subtitle download.
 
 subgrab -m Doctor Strange -s        # Silent mode (No prompts i.e., title selection [if not found]).
 
-subgrab -d DIRECTORY_PATH           # For specific directory.
+subgrab -d "DIRECTORY_PATH"         # For specific directory.
 
 subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters of the language).
 
@@ -77,6 +77,8 @@ Taken from Manojmj subtitles script.
 
 - Cross-platform (Tested on Linux and Windows).
 
+-  Logs generation on script execution (v0.15) 
+
 # Requirements:
 
 - Python v2.7
@@ -90,12 +92,7 @@ Taken from Manojmj subtitles script.
 - [ ] AllSubDB, OpenSubtitles, YIFY subtitles search.
 - [X] Adding silent mode for downloading subtitles.
 - [X] Adding CLI mode for manually downloading subtitles.
-- [ ] Adding GUI box for subtitle sync check in the media-player (in individual mode).
-- [ ] Use Logging.
-- [X] Optimize Code.
+- [X] Implement Logging.
 - [X] Implementation for seasons episodes.
 - [X] Different search algorithms implementation for precise results.
-- [ ] Integrating script with torrent clients.
 - [X] Improving CLI Mode by displaying the menu according to the site.
-- [ ] Making it compatible with Python 3.
-- [ ] Adding scoring for subtitle selecting and sorting the list according to scores.

@@ -1,17 +1,20 @@
 ==============
 Sub-Grab Changelog
-
+==============
 :Info: Changelog for sub-grab project.
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
 :Copyright: © 2017, Rafay Ghafoor.
-:Date: 2017-08-03
-:Version: 0.14
-=======
+:Date: 2017-09-14
+:Version: 0.15
 
 .. index:: CHANGELOG
 
 Version History
 ===============
+
+0.15 / 2017-09-14
+    * Improve subtitles selection.
+    * Implemented logging.
 
 0.14 / 2017-09-03
     * Fixed search strings.

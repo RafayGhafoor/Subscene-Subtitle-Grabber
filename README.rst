@@ -1,4 +1,4 @@
-Subtitles [Subscene] Grabber (Sub-Grab v0.14):
+Subtitles [Subscene] Grabber (Sub-Grab v0.15):
 ==============================================
 
 A script that allows you to download subtitles for TV-Series, Anime and
@@ -56,7 +56,7 @@ Examples:
 
     subgrab -m Doctor Strange -s        # Silent mode (No prompts i.e., title selection [if not found]).
 
-    subgrab -d DIRECTORY_PATH           # For specific directory.
+    subgrab -d "DIRECTORY_PATH"         # For specific directory.
 
     subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters of the language).
 
@@ -89,6 +89,8 @@ Features:
 
 -  Cross-platform (Tested on Linux and Windows).
 
+-  Logs generation on script execution (v0.15) 
+
 Requirements:
 =============
 
@@ -104,10 +106,7 @@ TODO:
 -  [ ] AllSubDB, OpenSubtitles, YIFY subtitles search.
 -  [X] Adding silent mode for downloading subtitles.
 -  [X] Adding CLI mode for manually downloading subtitles.
--  [ ] Adding GUI box for subtitle sync check in the media-player (in
-   individual mode).
--  [ ] Use Logging.
--  [X] Optimize Code.
+-  [X] Implement Logging.
 -  [X] Implementation for seasons episodes.
 -  [X] Different search algorithms implementation for precise
 
