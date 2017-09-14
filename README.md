@@ -14,7 +14,7 @@ A script that allows you to download subtitles for TV-Series, Anime and Movies f
 
 # Preview:
 
-[![asciicast](https://asciinema.org/a/0YutiMbCtvvoGtlEvJxKonL1L.png)](https://asciinema.org/a/0YutiMbCtvvoGtlEvJxKonL1L)
+[![asciicast](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5.png)](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5)
 
 # Usage:
 
