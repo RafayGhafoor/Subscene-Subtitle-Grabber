@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-# Subtitles [Subscene] Grabber (Sub-Grab v0.11):
-=======
-<<<<<<< HEAD
 # Subtitles [Subscene] Grabber (Sub-Grab v0.15):
-=======
-# Subtitles [Subscene] Grabber (Sub-Grab v0.14):
->>>>>>> fda832af71e7d54e48f7a09b2e0e61f190e199cb
->>>>>>> master
 
 A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
 
