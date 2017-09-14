@@ -4,6 +4,7 @@ import bs4
 import zipfile
 import os
 import logging
+
 logger = logging.getLogger("subscene.py")
 SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {

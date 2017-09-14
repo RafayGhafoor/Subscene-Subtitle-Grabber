@@ -1,5 +1,5 @@
-import subgrab.modules.directory as directory
-import subgrab.source.subscene as subscene
+import subgrab.utils.directory as directory
+import subgrab.providers.subscene as subscene
 import argparse
 import sys
 import logging
