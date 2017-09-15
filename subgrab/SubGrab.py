@@ -32,6 +32,7 @@ def main():
     args = parser.parse_args()
     logger.debug("Input with flags: %s" % (sys.argv))
     logger.info("Initialized SubGrab script")
+
     if args.silent:
         # If mode is silent
         logger.debug("Executing Silent Mode")
@@ -47,15 +48,16 @@ def main():
 
     if args.dir != '.':
         # Searches for movies in specified directory.
-        directory.create_folder()   # Create folder for the files in the current
-                                    # directory (which are not in a folder).
         logger.debug("Running in directory: %s" % (args.dir))
         try:
             os.chdir(args.dir)
+            directory.create_folder()   # Create folder for the files in the current
+                                        # directory (which are not in a folder).
             directory.get_media_files()
             directory.dir_dl()
         except Exception as e:
-            print 'Invalid Directory Input.', e
+            logger.debug('Invalid Directory Input - %s' % (e))
+            print('Invalid Directory Input - %s' % (e))
 
     elif args.dir == '.' and not args.media_name:
         # Searches for movies in current directory.
@@ -69,7 +71,6 @@ def main():
         logger.info("Searching For: %s" % (args.media_name))
         sub_link = subscene.sel_title(name=args.media_name.replace(' ', '.'))
         logger.info("Subtitle Link for %s : %s" % (args.media_name, sub_link))
-        # print sub_link
         if sub_link:
             for i in subscene.sel_sub(page=sub_link, sub_count=args.count, name=args.media_name):
                 logger.debug("Downloading Subtitle: %s\n" % (i))

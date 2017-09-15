@@ -4,13 +4,18 @@ Sub-Grab Changelog
 :Info: Changelog for sub-grab project.
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
 :Copyright: © 2017, Rafay Ghafoor.
-:Date: 2017-09-14
-:Version: 0.15
+:Date: 2017-09-15
+:Version: 0.16
 
 .. index:: CHANGELOG
 
 Version History
 ===============
+
+0.16 / 2017-09-15
+    * Improve project structure.
+    * Added support for allSubDB.
+    * Now prefers allSubDB api over subscene site in downloading subtitles in a directory.
 
 0.15 / 2017-09-14
     * Improve subtitles selection.

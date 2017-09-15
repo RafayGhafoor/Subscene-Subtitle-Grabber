@@ -1,10 +1,11 @@
 import shutil
 import os
 import subgrab.providers.subscene as subscene
+import subgrab.providers.subdb as subdb
 import logging
+
 logger = logging.getLogger("directory.py")
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
-ACTIVEDIR_FILES = [i for extension in EXT for i in os.listdir('.') if extension in i]
 MOVIES_DIR = {}  # Contains Movies Directories (keys) and the
                  # files inside them (values = [list])
 REMOVALS = []  # Which already contains subtitles
@@ -17,7 +18,7 @@ def create_folder():
     for them and paste the respective file in the corresponding
     folder.
     '''
-    for files in ACTIVEDIR_FILES:
+    for files in [i for extension in EXT for i in os.listdir('.') if extension in i]:
         for extension in EXT:
             if files.endswith(extension):
                 # Creates a folder of same name as file (excluding file extension)
@@ -64,15 +65,21 @@ def dir_dl(sub_count=1):
     for folders, movies in MOVIES_DIR.iteritems():
         os.chdir(folders)
         print "Downloading Subtitles for [%s]" % folders
+        logger.info("Downloading Subtitles for [%s]" % folders)
         for mov in movies:
-            sub_link = subscene.sel_title(mov)
-            if sub_link:
-                if subscene.sel_sub(page=sub_link, name=mov):
-                    for i in subscene.sel_sub(page=sub_link, sub_count=sub_count, name=mov):
-                        subscene.dl_sub(i)
+            if subdb.get_sub(hash=subdb.get_hash(mov), filename=mov, language='en') != 200:
+                logger.info("Subtitles for [%s] not found on AllSubDB" % (mov))
+                logger.info("Searching for subtitles on subscene - now")
+                sub_link = subscene.sel_title(os.path.splitext(mov)[0])
+                if sub_link:
+                    if subscene.sel_sub(page=sub_link, name=mov):
+                        for i in subscene.sel_sub(page=sub_link, sub_count=sub_count, name=mov):
+                            subscene.dl_sub(i)
+                    else:
+                        print "Subtitle not found for [%s]" % (mov.capitalize())
+                        logger.debug("Subtitle not found for [%s]" % (mov))
                 else:
                     print "Subtitle not found for [%s]" % (mov.capitalize())
-            else:
-                print "Subtitle not found for [%s]" % (mov.capitalize())
+                    logger.debug("Subtitle not found for [%s]" % (mov))
         os.chdir(cwd)
     # print("--- Function (DOWNLOAD_SUB) took %s seconds ---" % (time.time() - start_time))

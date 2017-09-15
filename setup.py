@@ -6,13 +6,13 @@ def readme():
 
 setup(
     name='subgrab',
-    version='0.15',
+    version='0.16',
     description='A python script for automating subtitles downloading.',
     long_description=readme(),
     url='https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber',
     author='Rafay Ghafoor',
     author_email='rafayghafoor@protonmail.com',
-    packages=['subgrab', 'subgrab.source', 'subgrab.modules'],
+    packages=['subgrab', 'subgrab.providers', 'subgrab.utils'],
     entry_points = {'console_scripts': ['subgrab = subgrab.__main__:main']},
     zip_safe = False,
     license='GPL',

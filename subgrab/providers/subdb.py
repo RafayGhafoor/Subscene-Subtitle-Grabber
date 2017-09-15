@@ -1,11 +1,13 @@
+import logging
 import os.path
 import hashlib
 import requests
+import os.path
 
-headers = {'User-agent': "SubDB/1.0 (subgrab/1.0; http://github.com/RafayGhafoor/Subscene-Subtitle-Grabber)"}
-languages = ('en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ro', 'sv', 'tr')
-download_url = "http://api.thesubdb.com/?action=download"
-
+HEADERS = {'User-agent': "SubDB/1.0 (subgrab/1.0; http://github.com/RafayGhafoor/Subscene-Subtitle-Grabber)"}
+LANGUAGES = ('en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ro', 'sv', 'tr')
+DOWNLOAD_URL = "http://api.thesubdb.com/?action=download"
+logger = logging.getLogger("subdb.py")
 
 def get_hash(name):
     readsize = 64 * 1024
@@ -17,14 +19,24 @@ def get_hash(name):
     return hashlib.md5(data).hexdigest()
 
 
-def download(hash, filename, language='en'):
-    r = requests.get(download_url + '&hash=' + hash + '&language=' + language, headers=headers)
-    with open("Dog.srt", 'wb') as f:
-        for chunk in r.iter_content(chunk_size=150):
-            if chunk:
-                f.write(chunk)
-
-
-if __name__ == '__main__':
-    hash = get_hash("A.Dogs.Purpose.2017.720p.WEB-DL.900MB.ShAaNiG.mkv")
-    s = download(hash=hash, filename="A.Dogs.Purpose.2017.720p.WEB-DL.900MB.ShAaNiG.mkv", language='en')
+def get_sub(hash, filename="filename.mkv", language='en'):
+    logger.info("Downloading subtitles from SubDb")
+    logger.debug("Language selected for subtitles: %s" % (language))
+    if language.lower() in LANGUAGES:
+        r = requests.get(DOWNLOAD_URL + '&hash=' + hash + '&language=' + language.lower(), headers=HEADERS)
+        logger.debug("Status code for %s is %s" % (filename, r.status_code))
+        if r.status_code == 200:
+            with open(os.path.splitext(filename)[0] + '.srt', 'wb') as f:
+                for chunk in r.iter_content(chunk_size=150):
+                    if chunk:
+                        f.write(chunk)
+            logger.info("Downloaded Subtitles for %s" % (filename))
+            return 200
+        elif r.status_code == 404:
+            logger.info("[SubDB] Subtitle not found for %s" % (filename))
+        else:
+            logger.debug("Invalid file %s" % (filename))
+            print "Invalid file"
+    else:
+        print "Language not supported"
+        return

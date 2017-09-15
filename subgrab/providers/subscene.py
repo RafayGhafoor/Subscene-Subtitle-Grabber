@@ -143,7 +143,7 @@ def sel_title(name):
                 return
 
     except Exception as e:
-        logger.debug("Returning -", e)
+        logger.debug("Returning - %s" % (e))
         return
 
     title_lst = soup.findAll("div", {"class": "search-result"}) # Creates a list of titles
