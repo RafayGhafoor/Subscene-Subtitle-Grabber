@@ -67,7 +67,12 @@ def dir_dl(sub_count=1):
         print "Downloading Subtitles for [%s]" % folders
         logger.info("Downloading Subtitles for [%s]" % folders)
         for mov in movies:
-            if subdb.get_sub(hash=subdb.get_hash(mov), filename=mov, language='en') != 200:
+            subdb_check = subdb.get_sub(hash=subdb.get_hash(mov), filename=mov, language='en')
+            if subdb_check == 200:
+                logger.info("Subtitle Downloaded for %s" % (mov))
+                print("Subtitle Downloaded for %s" %(mov))
+
+            elif subdb != 200:
                 logger.info("Subtitles for [%s] not found on AllSubDB" % (mov))
                 logger.info("Searching for subtitles on subscene - now")
                 sub_link = subscene.sel_title(os.path.splitext(mov)[0])
