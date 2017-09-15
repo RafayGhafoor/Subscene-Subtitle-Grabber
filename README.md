@@ -1,4 +1,4 @@
-# Subtitles [Subscene] Grabber (Sub-Grab v0.15):
+# Subtitles [Subscene] Grabber (Sub-Grab v0.16):
 
 A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
 
@@ -14,7 +14,7 @@ A script that allows you to download subtitles for TV-Series, Anime and Movies f
 
 # Preview:
 
-[![asciicast](https://asciinema.org/a/0YutiMbCtvvoGtlEvJxKonL1L.png)](https://asciinema.org/a/0YutiMbCtvvoGtlEvJxKonL1L)
+[![asciicast](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5.png)](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5?speed=3)
 
 # Usage:
 
@@ -77,7 +77,9 @@ Taken from Manojmj subtitles script.
 
 - Cross-platform (Tested on Linux and Windows).
 
--  Logs generation on script execution (v0.15) 
+- Logs generation on script execution (v0.15)
+
+- Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory. 
 
 # Requirements:
 
@@ -89,7 +91,9 @@ Taken from Manojmj subtitles script.
 
 - [x] Adding support for more languages.
 - [x] Adding flags.
-- [ ] AllSubDB, OpenSubtitles, YIFY subtitles search.
+- [X] Support for AllSubDB .
+- [ ] Support for OpenSubtitles.
+- [ ] Support for YifySubtitles.
 - [X] Adding silent mode for downloading subtitles.
 - [X] Adding CLI mode for manually downloading subtitles.
 - [X] Implement Logging.

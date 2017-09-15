@@ -4,6 +4,7 @@ import bs4
 import zipfile
 import os
 import logging
+
 logger = logging.getLogger("subscene.py")
 SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {
@@ -142,7 +143,7 @@ def sel_title(name):
                 return
 
     except Exception as e:
-        logger.debug("Returning -", e)
+        logger.debug("Returning - %s" % (e))
         return
 
     title_lst = soup.findAll("div", {"class": "search-result"}) # Creates a list of titles

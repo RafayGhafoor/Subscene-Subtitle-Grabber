@@ -1,4 +1,4 @@
-Subtitles [Subscene] Grabber (Sub-Grab v0.15):
+Subtitles [Subscene] Grabber (Sub-Grab v0.16):
 ==============================================
 
 A script that allows you to download subtitles for TV-Series, Anime and
@@ -89,7 +89,9 @@ Features:
 
 -  Cross-platform (Tested on Linux and Windows).
 
--  Logs generation on script execution (v0.15) 
+-  Logs generation on script execution (v0.15).
+
+-  Supports SubDB now.
 
 Requirements:
 =============
@@ -103,7 +105,9 @@ TODO:
 
 -  [x] Adding support for more languages.
 -  [x] Adding flags.
--  [ ] AllSubDB, OpenSubtitles, YIFY subtitles search.
+-  [X] Support for AllSubDB. 
+-  [ ] Support for OpenSubtitles.
+-  [ ] Support for YIFY subtitles search.
 -  [X] Adding silent mode for downloading subtitles.
 -  [X] Adding CLI mode for manually downloading subtitles.
 -  [X] Implement Logging.
