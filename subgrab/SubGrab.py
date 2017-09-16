@@ -72,7 +72,7 @@ def main():
         sub_link = subscene.sel_title(name=args.media_name.replace(' ', '.'))
         logger.info("Subtitle Link for %s : %s" % (args.media_name, sub_link))
         if sub_link:
-            for i in subscene.sel_sub(page=sub_link, sub_count=args.count, name=args.media_name.replace(' ', '.')):
+            for i in subscene.sel_sub(page=sub_link, sub_count=args.count, name=args.media_name):
                 logger.debug("Downloading Subtitle: %s\n" % (i))
                 subscene.dl_sub(i)
 

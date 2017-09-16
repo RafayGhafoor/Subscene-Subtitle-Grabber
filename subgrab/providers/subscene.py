@@ -179,7 +179,7 @@ def sel_sub(page, sub_count=1, name=""):
             # we format the name by replacing dots with spaces, which will
             # split it into the length of the list of two elements (0,1,2)
             formatted_name = name.replace('.', ' ').split()
-            if name in link.text.lower():
+            if name.lower() in link.text.lower():
                 sub_list.append(link.get('href'))
                 current_sub += 1
 
