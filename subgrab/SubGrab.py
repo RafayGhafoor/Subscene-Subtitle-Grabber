@@ -57,7 +57,7 @@ def main():
             directory.dir_dl()
         except Exception as e:
             logger.debug('Invalid Directory Input - %s' % (e))
-            print('Invalid Directory Input - %s' % (e))
+            print(('Invalid Directory Input - %s' % (e)))
 
     elif args.dir == '.' and not args.media_name:
         # Searches for movies in current directory.
@@ -77,4 +77,4 @@ def main():
                 subscene.dl_sub(i)
 
     else:
-        print 'Incorrect Arguments Specified.'
+        print('Incorrect Arguments Specified.')

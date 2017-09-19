@@ -4,7 +4,7 @@ import bs4
 import zipfile
 import os
 import logging
-
+from six.moves import input
 logger = logging.getLogger("subscene.py")
 SUB_QUERY = "https://subscene.com/subtitles/release"
 LANGUAGE = {
@@ -28,10 +28,11 @@ def scrape_page(url, parameter=''):
     '''
     Retrieve content from a url.
     '''
+    HEADERS = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
     if parameter:
-        req = requests.get(url, params={'q': parameter})
+        req = requests.get(url, params={'q': parameter}, headers=HEADERS)
     else:
-        req = requests.get(url)
+        req = requests.get(url, headers=HEADERS)
     req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
@@ -99,11 +100,11 @@ def cli_mode(titles_name, category):
     for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
         title_text = x.text.strip()
         titles_and_links[title_text] = x.a.get("href")
-        print "(%s): %s" % (i, title_text.encode("ascii", "ignore"))
+        print("(%s): %s" % (i, title_text))
         media_titles.append(title_text)
 
     try:
-        qs = int(raw_input("\nPlease Enter Movie Number: "))
+        qs = int(input("\nPlease Enter Movie Number: "))
         return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
     except Exception as e:
@@ -123,7 +124,7 @@ def sel_title(name):
     '''
     logger.info("Selecting title for name: %s" % (name))
     if not name:
-        print "Invalid Input."
+        print("Invalid Input.")
         return
 
     soup = scrape_page(url=SUB_QUERY, parameter=name)
@@ -139,7 +140,7 @@ def sel_title(name):
         elif soup.find("div", {"class": "byTitle"}):
             # for example, if 'abcedesgg' is search-string
             if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
-                print "Sorry, the subtitles for this media file aren't available."
+                print("Sorry, the subtitles for this media file aren't available.")
                 return
 
     except Exception as e:
@@ -215,5 +216,5 @@ def dl_sub(page):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace('-', ' '))
-    print "Subtitle (%s) - Downloaded\n" % found_sub.replace('-', ' ').capitalize()
+    print("Subtitle (%s) - Downloaded\n" % found_sub.replace('-', ' ').capitalize())
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))

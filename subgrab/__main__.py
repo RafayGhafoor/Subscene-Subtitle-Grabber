@@ -1,4 +1,4 @@
-from SubGrab import main
+from .SubGrab import main
 
 if __name__ == '__main__':
     main()

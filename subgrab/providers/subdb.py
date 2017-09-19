@@ -34,7 +34,7 @@ def get_sub(file_hash, filename="filename.mkv", language='en'):
             logger.info("[SubDB] Subtitle not found for %s" % (filename))
         else:
             logger.debug("Invalid file %s" % (filename))
-            print "Invalid file"
+            print("Invalid file")
     else:
-        print "Language not supported"
+        print("Language not supported")
         return
