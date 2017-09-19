@@ -1,11 +1,8 @@
-from __future__ import absolute_import
-from __future__ import print_function
 import shutil
 import os
 import subgrab.providers.subscene as subscene
 import subgrab.providers.subdb as subdb
 import logging
-import six
 
 logger = logging.getLogger("directory.py")
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
@@ -65,12 +62,12 @@ def dir_dl(sub_count=1):
     '''
     # start_time = time.time()
     cwd = os.getcwd()
-    for folders, movies in six.iteritems(MOVIES_DIR):
+    for folders, movies in MOVIES_DIR.items():
         os.chdir(folders)
         print("Downloading Subtitles for [%s]" % folders)
         logger.info("Downloading Subtitles for [%s]" % folders)
         for mov in movies:
-            subdb_check = subdb.get_sub(hash=subdb.get_hash(mov), filename=mov, language='en')
+            subdb_check = subdb.get_sub(file_hash=subdb.get_hash(mov), filename=mov, language='en')
             if subdb_check == 200:
                 logger.info("Subtitle Downloaded for %s" % (mov))
                 print(("Subtitle Downloaded for %s" %(mov)))
