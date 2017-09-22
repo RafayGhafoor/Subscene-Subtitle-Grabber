@@ -23,6 +23,7 @@ MODE = "prompt"
 DEFAULT_LANG = LANGUAGE["EN"]   # Default language in which subtitles
                                 # are downloaded.
 
+
 def scrape_page(url, parameter=''):
     '''
     Retrieve content from a url.
@@ -32,7 +33,8 @@ def scrape_page(url, parameter=''):
         req = requests.get(url, params={'q': parameter}, headers=HEADERS)
     else:
         req = requests.get(url, headers=HEADERS)
-    req_html = bs4.BeautifulSoup(req.content, "lxml")
+    if req.status_code == 200:
+        req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
 
@@ -95,9 +97,8 @@ def cli_mode(titles_name, category):
     '''
     media_titles = [] # Contains key names of titles_and_links dictionary.
     titles_and_links = {} # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
-
     for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
-        title_text = x.text.strip()
+        title_text = x.text.encode('ascii', 'ignore').decode('utf-8').strip()
         titles_and_links[title_text] = x.a.get("href")
         print("(%s): %s" % (i, title_text))
         media_titles.append(title_text)

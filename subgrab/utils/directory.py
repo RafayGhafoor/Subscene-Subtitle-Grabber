@@ -77,8 +77,10 @@ def dir_dl(sub_count=1):
                 logger.info("Searching for subtitles on subscene - now")
                 sub_link = subscene.sel_title(os.path.splitext(mov)[0])
                 if sub_link:
-                    if subscene.sel_sub(page=sub_link, name=mov):
-                        for i in subscene.sel_sub(page=sub_link, sub_count=sub_count, name=mov):
+                    # Remove extension from mov argument
+                    selected_sub = subscene.sel_sub(page=sub_link, name=os.path.splitext(mov)[0])
+                    if selected_sub:
+                        for i in selected_sub:
                             subscene.dl_sub(i)
                     else:
                         print("Subtitle not found for [%s]" % (mov.capitalize()))

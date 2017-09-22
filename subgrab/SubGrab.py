@@ -4,7 +4,6 @@ import argparse
 import sys
 import logging
 import os
-
 if os.sep == "\\": # Windows OS
     log_home = os.path.expanduser(os.path.join(os.path.join('~', 'AppData'), 'Local'))
 else: # Other than Windows
@@ -56,6 +55,7 @@ def main():
             directory.get_media_files()
             directory.dir_dl()
         except Exception as e:
+            print(Exception)
             logger.debug('Invalid Directory Input - %s' % (e))
             print(('Invalid Directory Input - %s' % (e)))
 
