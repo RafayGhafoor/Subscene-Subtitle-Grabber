@@ -107,12 +107,15 @@ Taken from Manojmj subtitles script.
 - [X] Different search algorithms implementation for precise results.
 - [X] Improving CLI Mode by displaying the menu according to the site.
 - [ ] Multiple subtitle language support also associated with the count variable.
+
 For example:
 >>> subgrab -m Doctor Strange -s -l AR, EN, SP -c 3
 should download 3 subtitles for each language specified
+
 - [ ] An option to print list of movies which has subtitles.
 - [ ] Creating options in context menu.
 - [ ] Display menu which enables to download subtitles for selected directories. (Supporting ranges)
+
 For Examples:
 (0) Movie 1
 (1) Movie 2
