@@ -92,11 +92,35 @@ Taken from Manojmj subtitles script.
 - [x] Adding support for more languages.
 - [x] Adding flags.
 - [X] Support for AllSubDB .
-- [ ] Support for OpenSubtitles.
-- [ ] Support for YifySubtitles.
+- [ ] Support for OpenSubtitles, YifySubtitles.
+- [ ] Auto-Sync subtitle naming with the media file when downloaded from subscene.
+- [ ] A GUI box which creates a dialogue box (consisting of tick and cross), which waits for the user to check if the subtitle downloaded is synchronized with media file or not - if clicked cross, downloads another subtitle (Process gets repeated unless, correctly synchronized).
+- [ ] Watch-folder feature (runs as a service). # Useful for movies automatically downloaded on servers.
+- [ ] Argument handling (Replace Argsparse with Click).
+- [ ] Using Tabulate for monitoring directory subtitle downloading progress. Three Columns [#, Movie_Folder, Status].
+- [ ] Better Logging.
+- [ ] Download subtitles for movies contained in a directory of X year.
 - [X] Adding silent mode for downloading subtitles.
 - [X] Adding CLI mode for manually downloading subtitles.
 - [X] Implement Logging.
 - [X] Implementation for seasons episodes.
 - [X] Different search algorithms implementation for precise results.
 - [X] Improving CLI Mode by displaying the menu according to the site.
+- [ ] Multiple subtitle language support also associated with the count variable.
+For example:
+>>> subgrab -m Doctor Strange -s -l AR, EN, SP -c 3
+should download 3 subtitles for each language specified
+- [ ] An option to print list of movies which has subtitles.
+- [ ] Creating options in context menu.
+- [ ] Display menu which enables to download subtitles for selected directories. (Supporting ranges)
+For Examples:
+(0) Movie 1
+(1) Movie 2
+.
+.
+(10) Movie 10
+------------------------------------------------------------------------------------------------------
+(Interactive Prompt)
+> 1-3, 6,7,10 
+
+will download subtitles for the directories specified.
