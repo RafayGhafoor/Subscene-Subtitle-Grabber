@@ -33,8 +33,10 @@ def scrape_page(url, parameter=''):
         req = requests.get(url, params={'q': parameter}, headers=HEADERS)
     else:
         req = requests.get(url, headers=HEADERS)
-    if req.status_code == 200:
-        req_html = bs4.BeautifulSoup(req.content, "lxml")
+    if req.status_code != 200:
+        logger.debug("%s not retrieved." % (req.url))
+        return
+    req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
 
 
