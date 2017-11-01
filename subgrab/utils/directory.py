@@ -36,7 +36,6 @@ def get_media_files():
     '''
     Obtains media files from the current/specified directory.
     '''
-    # start_time = time.time()
     for folders, _, files in os.walk('.'):
         for i in files:
             folders = folders.replace('.' + os.sep, '')
@@ -49,11 +48,8 @@ def get_media_files():
                     MOVIES_DIR[folders].append(i)
     # Directories which contains .srt files (Subtitles)
     for i in REMOVALS:
-        try:
+        if MOVIES_DIR.get(i): # a check for the presence of key which can be already removed or not present
             del(MOVIES_DIR[i])
-        except KeyError:    # Already Removed if one srt file was found in folder
-            pass
-    # print("--- Function (GET_MEDIA_FILES) took %s seconds ---" % (time.time() - start_time))
 
 
 def dir_dl(sub_count=1):
@@ -89,4 +85,3 @@ def dir_dl(sub_count=1):
                     print("Subtitle not found for [%s]" % (mov.capitalize()))
                     logger.debug("Subtitle not found for [%s]" % (mov))
         os.chdir(cwd)
-    # print("--- Function (DOWNLOAD_SUB) took %s seconds ---" % (time.time() - start_time))
