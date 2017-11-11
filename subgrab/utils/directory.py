@@ -1,8 +1,8 @@
 import shutil
 import os
+import logging
 import subgrab.providers.subscene as subscene
 import subgrab.providers.subdb as subdb
-import logging
 
 logger = logging.getLogger("directory.py")
 EXT = ['.mp4', '.mkv', '.avi', '.flv']

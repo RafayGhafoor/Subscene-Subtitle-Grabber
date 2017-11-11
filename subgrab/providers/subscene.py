@@ -218,5 +218,5 @@ def dl_sub(page):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace('-', ' '))
-    print("Subtitle ({}) - Downloaded\n".format(found_sub.replace('-', ' ').capitalize())
+    print("Subtitle ({}) - Downloaded\n".format(found_sub.replace('-', ' ').capitalize()))
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))

@@ -1,9 +1,10 @@
-import subgrab.utils.directory as directory
-import subgrab.providers.subscene as subscene
 import argparse
 import sys
 import logging
+import logging.config
 import os
+import subgrab.utils.directory as directory
+import subgrab.providers.subscene as subscene
 if os.sep == "\\": # Windows OS
     log_home = os.path.expanduser(os.path.join(os.path.join('~', 'AppData'), 'Local'))
 else: # Other than Windows
@@ -12,8 +13,7 @@ log_directory = os.path.join(log_home, 'Subgrab')
 if not os.path.exists(log_directory):
     os.mkdir(log_directory)
 logfile_name = os.path.join(log_directory, "subgrab.log")
-DEFAU
-LT_LOGGING = {
+DEFAULT_LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
