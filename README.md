@@ -1,28 +1,62 @@
-# Subtitles [Subscene] Grabber (Sub-Grab v0.16):
+# SubGrab - Command-line Subtitles Downloader:
 
-A script that allows you to download subtitles for TV-Series, Anime and Movies from subscene site.
+A python*3* script that allows you to download subtitles for TV-Series, Anime and Movies from multiple sites.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
 
-# Status:
+# Index:
+* [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Installation)
+* [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Requirements)
+* [Supported Sites](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Providers-Supported)
+* [Preview](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Preview)
+* [Usage](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Usage)
+* [Examples](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Examples)
+* [Features](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Features)
+* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Changelog)
+* [Features Upcoming](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#TODO)
+
+# Status/Version:
 
 - Beta Release.
+- Current Version: 0.17
 
 # Installation:
+
+* Via Repo:
+```
+git clone https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber
+cd Subscene-Subtitle-Grabber
+python setup.py install
+```
+
+* Via PIP:
 
 `pip install subgrab`
 
 # Preview:
 
-[![asciicast](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5.png)](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5?speed=3)
+[![asciicast](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5.png)](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5?speed=2)
+
+# Providers Supported:
+Following sites can be used for subtitle downloading:
+
+<center>
+
+| Supported Sites |
+| :--------------: |
+| SUBSCENE ```(-m)``` |
+| ALLSUBDB ```(default for directories)``` |
+
+</center>
+
 
 # Usage:
 
 ```
 Usage:
 
-subgrab [-h] [-d DIR] [-m MEDIA_NAME [MEDIA_NAME ...]] [-s]
-                   [-c COUNT] [-l LANG]
+subgrab [-h] [-d directory path] [-m Name of the movie/season] [-s Silent Mode]
+                   [-c Number of Subtitles to be downloaded] [-l Custom language]
 
 Options:
 
@@ -58,6 +92,10 @@ subgrab -m The Intern 2015 -s -l AR # Language specified (First two characters o
 subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 ```
 
+# Changelog:
+
+* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber/blob/dev/changelog.rst)
+
 # Note:
 
 - (For Windows) To use it from the context menu, paste subtitle.bat file in "shell:sendto" (By typing this in RUN).
@@ -79,15 +117,11 @@ Taken from Manojmj subtitles script.
 
 - Logs generation on script execution (v0.15)
 
-- Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory. 
-
-# Changelog:
-
-* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber/blob/dev/changelog.rst)
+- Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory.
 
 # Requirements:
 
-- Python v2.7
+- Python 3
 - Requests
 - BeautifulSoup
 
@@ -131,7 +165,7 @@ For Examples:
 (10) Movie 10
 ------------------------------------------------------------------------------------------------------
 (Interactive Prompt)
-> 1-3, 6,7,10 
+> 1-3, 6,7,10
 
 will download subtitles for the directories specified.
 ```
