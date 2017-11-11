@@ -5,15 +5,15 @@ A python*3* script that allows you to download subtitles for TV-Series, Anime an
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
 
 # Index:
-* [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Installation)
-* [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Requirements)
-* [Supported Sites](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Providers-Supported)
-* [Preview](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Preview)
-* [Usage](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Usage)
-* [Examples](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Examples)
-* [Features](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Features)
-* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#Changelog)
-* [Features Upcoming](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#TODO)
+* [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#installation)
+* [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#requirements)
+* [Supported Sites](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#providers-supported)
+* [Preview](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#preview)
+* [Usage](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#usage)
+* [Examples](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#examples)
+* [Features](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#features)
+* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#changelog)
+* [Features Upcoming](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#todo)
 
 # Status/Version:
 
