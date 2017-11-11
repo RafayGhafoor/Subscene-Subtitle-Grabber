@@ -4,13 +4,16 @@ Sub-Grab Changelog
 :Info: Changelog for sub-grab project.
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
 :Copyright: © 2017, Rafay Ghafoor.
-:Date: 2017-09-15
-:Version: 0.16
+:Date: 2017-11-11
+:Version: 0.17
 
 .. index:: CHANGELOG
 
 Version History
 ===============
+
+0.17 / 2017-11-11
+    * Only Python 3 Compatible.
 
 0.16 / 2017-09-15
     * Improve project structure.
