@@ -23,11 +23,11 @@ def create_folder():
             if files.endswith(extension):
                 # Creates a folder of same name as file (excluding file extension)
                 try:
-                    logger.info("Moved to folder: %s" % (files.strip(extension)))
+                    logger.info("Moved to folder: {}".format(files.strip(extension)))
                     os.mkdir(files.strip(extension))
                     shutil.move(files, files.strip(extension))  # Moves the file to the new folder
                 except (OSError, IOError):
-                    logger.debug("Cannot create folder for: %s" % (files.strip(extension)))
+                    logger.debug("Cannot create folder for: {}".format(files.strip(extension)))
                           # If folder exists for the filename or name which
                           # contains characters out of the ordinal range
 
@@ -60,16 +60,16 @@ def dir_dl(sub_count=1):
     cwd = os.getcwd()
     for folders, movies in MOVIES_DIR.items():
         os.chdir(folders)
-        print("Downloading Subtitles for [%s]" % folders)
-        logger.info("Downloading Subtitles for [%s]" % folders)
+        print("Downloading Subtitles for [{}]".format(folders))
+        logger.info("Downloading Subtitles for [{}]".format(folders))
         for mov in movies:
             subdb_check = subdb.get_sub(file_hash=subdb.get_hash(mov), filename=mov, language='en')
             if subdb_check == 200:
-                logger.info("Subtitle Downloaded for %s" % (mov))
-                print(("Subtitle Downloaded for %s" %(mov)))
+                logger.info("Subtitle Downloaded for {}".format(mov))
+                print(("Subtitle Downloaded for {}".format(mov)))
 
             elif subdb != 200:
-                logger.info("Subtitles for [%s] not found on AllSubDB" % (mov))
+                logger.info("Subtitles for [{}] not found on AllSubDB".format(mov))
                 logger.info("Searching for subtitles on subscene - now")
                 sub_link = subscene.sel_title(os.path.splitext(mov)[0])
                 if sub_link:
@@ -79,9 +79,9 @@ def dir_dl(sub_count=1):
                         for i in selected_sub:
                             subscene.dl_sub(i)
                     else:
-                        print("Subtitle not found for [%s]" % (mov.capitalize()))
-                        logger.debug("Subtitle not found for [%s]" % (mov))
+                        print("Subtitle not found for [{}]".format(mov.capitalize()))
+                        logger.debug("Subtitle not found for [{}]".format(mov))
                 else:
-                    print("Subtitle not found for [%s]" % (mov.capitalize()))
-                    logger.debug("Subtitle not found for [%s]" % (mov))
+                    print("Subtitle not found for [{}]".format(mov.capitalize()))
+                    logger.debug("Subtitle not found for [{}]".format(mov))
         os.chdir(cwd)

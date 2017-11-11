@@ -34,7 +34,7 @@ def scrape_page(url, parameter=''):
     else:
         req = requests.get(url, headers=HEADERS)
     if req.status_code != 200:
-        logger.debug("%s not retrieved." % (req.url))
+        logger.debug("{} not retrieved.".format(req.url))
         return
     req_html = bs4.BeautifulSoup(req.content, "lxml")
     return req_html
@@ -50,7 +50,7 @@ def zip_extractor(name):
             z.extractall(".")
         os.remove(name)
     except Exception as e:
-        logger.warning("Zip Extractor Error: %s" % (e))
+        logger.warning("Zip Extractor Error: {}".format(e))
 
 
 def silent_mode(title_name, category, name=''):
@@ -102,7 +102,7 @@ def cli_mode(titles_name, category):
     for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
         title_text = x.text.encode('ascii', 'ignore').decode('utf-8').strip()
         titles_and_links[title_text] = x.a.get("href")
-        print("(%s): %s" % (i, title_text))
+        print("({}): {}".format(i, title_text))
         media_titles.append(title_text)
 
     try:
@@ -110,7 +110,7 @@ def cli_mode(titles_name, category):
         return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
 
     except Exception as e:
-        logger.warning("Movie Skipped - %s" % (e))
+        logger.warning("Movie Skipped - {}".format(e))
         # If pressed Enter, movie is skipped.
         return
 
@@ -124,19 +124,19 @@ def sel_title(name):
     URL EXAMPLE:
     https://subscene.com/subtitles/title?q=Doctor.Strange
     '''
-    logger.info("Selecting title for name: %s" % (name))
+    logger.info("Selecting title for name: {}".format(name))
     if not name:
         print("Invalid Input.")
         return
 
     soup = scrape_page(url=SUB_QUERY, parameter=name)
-    logger.info("Searching in query: %s" % (SUB_QUERY + "/?q=" + name))
+    logger.info("Searching in query: {}".format(SUB_QUERY + "/?q=" + name))
 
     try:
         if not soup.find("div", {"class": "byTitle"}):
             # URL EXAMPLE (RETURNED):
             # https://subscene.com/subtitles/release?q=pele.birth.of.the.legend
-            logger.info("Searching in release query: %s" % (SUB_QUERY + '?q=' + name.replace(' ', '.')))
+            logger.info("Searching in release query: {}".format(SUB_QUERY + '?q=' + name.replace(' ', '.')))
             return SUB_QUERY + '?q=' + name.replace(' ', '.')
 
         elif soup.find("div", {"class": "byTitle"}):
@@ -146,7 +146,7 @@ def sel_title(name):
                 return
 
     except Exception as e:
-        logger.debug("Returning - %s" % (e))
+        logger.debug("Returning - {}".format(e))
         return
 
     title_lst = soup.findAll("div", {"class": "search-result"}) # Creates a list of titles
@@ -218,5 +218,5 @@ def dl_sub(page):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace('-', ' '))
-    print("Subtitle (%s) - Downloaded\n" % found_sub.replace('-', ' ').capitalize())
+    print("Subtitle ({}) - Downloaded\n".format(found_sub.replace('-', ' ').capitalize())
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))

@@ -12,13 +12,43 @@ log_directory = os.path.join(log_home, 'Subgrab')
 if not os.path.exists(log_directory):
     os.mkdir(log_directory)
 logfile_name = os.path.join(log_directory, "subgrab.log")
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(logfile_name)
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+DEFAU
+LT_LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'formatter': 'standard',
+            'filename': logfile_name,
+        },
+    },
+    'loggers': {
+        'SubGrab': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'directory': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'subscene': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+    }
+}
+logging.config.dictConfig(DEFAULT_LOGGING)
+logger = logging.getLogger('SubGrab')
 
 
 def main():
@@ -29,7 +59,7 @@ def main():
     parser.add_argument('-c', '--count', type=int, default=1, help='Number of subtitles to be downloaded.')
     parser.add_argument('-l', '--lang', default='EN', help='Change language.')
     args = parser.parse_args()
-    logger.debug("Input with flags: %s" % (sys.argv))
+    logger.debug("Input with flags: {}".format(sys.argv))
     logger.info("Initialized SubGrab script")
 
     if args.silent:
@@ -41,13 +71,13 @@ def main():
         # Select language - Enter first two letters of the language
         if len(args.lang) == 2:
             subscene.DEFAULT_LANG = subscene.LANGUAGE[args.lang.upper()]
-            logger.info("Set Language: %s" % (args.lang))
+            logger.info("Set Language: {}".format(args.lang))
         else:
             sys.exit("Invalid language specified.")
 
     if args.dir != '.':
         # Searches for movies in specified directory.
-        logger.debug("Running in directory: %s" % (args.dir))
+        logger.debug("Running in directory: {}".format(args.dir))
         try:
             os.chdir(args.dir)
             directory.create_folder()   # Create folder for the files in the current
@@ -56,8 +86,8 @@ def main():
             directory.dir_dl()
         except Exception as e:
             print(Exception)
-            logger.debug('Invalid Directory Input - %s' % (e))
-            print(('Invalid Directory Input - %s' % (e)))
+            logger.debug('Invalid Directory Input - {}'.format(e))
+            print(('Invalid Directory Input - {}'.format(e)))
 
     elif args.dir == '.' and not args.media_name:
         # Searches for movies in current directory.
@@ -68,12 +98,12 @@ def main():
     elif args.media_name:
         # Searches for the specified movie.
         args.media_name = ' '.join(args.media_name)
-        logger.info("Searching For: %s" % (args.media_name))
+        logger.info("Searching For: {}".format(args.media_name))
         sub_link = subscene.sel_title(name=args.media_name.replace(' ', '.'))
-        logger.info("Subtitle Link for %s : %s" % (args.media_name, sub_link))
+        logger.info("Subtitle Link for {} : {}".format(args.media_name, sub_link))
         if sub_link:
             for i in subscene.sel_sub(page=sub_link, sub_count=args.count, name=args.media_name):
-                logger.debug("Downloading Subtitle: %s\n" % (i))
+                logger.debug("Downloading Subtitle: {}\n".format(i))
                 subscene.dl_sub(i)
 
     else:
