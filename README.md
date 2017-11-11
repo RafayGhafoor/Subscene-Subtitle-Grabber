@@ -81,6 +81,10 @@ Taken from Manojmj subtitles script.
 
 - Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory. 
 
+# Changelog:
+
+* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber/blob/dev/changelog.rst)
+
 # Requirements:
 
 - Python v2.7
