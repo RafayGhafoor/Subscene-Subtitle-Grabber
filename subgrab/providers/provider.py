@@ -9,20 +9,6 @@ PROVIDERS = [
 "opensubtitles", "legendastv"
 ]                 # More to be added
 
-LANGUAGES = (
-"Arabic",
-"Burmese",
-"Danish",
-"Dutch",
-"English",
-"Farsi_persian",
-"Indonesian",
-"Italian",
-"Malay",
-"Spanish",
-"Vietnamese"
-)
-
 PROVIDERS_SUPPORTED_LANGUAGES = {
 'subscene': (
              'Arabic', 'Burmese','Danish',
