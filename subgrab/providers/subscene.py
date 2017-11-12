@@ -212,11 +212,11 @@ def dl_sub(page):
     div = soup.find('div', {'class': 'download'})
     down_link = 'https://subscene.com' + div.find('a').get('href')
     r = requests.get(down_link, stream=True)
-    for found_sub in re.findall("filename=(.+)", r.headers['content-disposition']):
-        with open(found_sub.replace('-', ' '), 'wb') as f:
-            for chunk in r.iter_content(chunk_size=150):
-                if chunk:
-                    f.write(chunk)
-        zip_extractor(found_sub.replace('-', ' '))
+    filename = re.findall("filename=(.+)", r.headers['content-disposition'])[0]
+    with open(filename.replace('-', ' '), 'wb') as f:
+        for chunk in r.iter_content(chunk_size=150):
+            if chunk:
+                f.write(chunk)
+    zip_extractor(filename.replace('-', ' '))
     print("Subtitle ({}) - Downloaded\n".format(found_sub.replace('-', ' ').capitalize()))
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))
