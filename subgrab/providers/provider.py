@@ -4,6 +4,10 @@ A provider base class which defines template for the subtitle sites.
 
 # Using lists because it's also used for prioritizing subtitle Downloading
 # for example, the subtitles will be first searched on subscene, then allsubdb..
+import logging
+import requests
+import bs4
+
 PROVIDERS = [
 "subscene", "allsubdb",
 "opensubtitles", "legendastv"
@@ -29,11 +33,10 @@ class Provider:
     '''
     A base class for providers.
     '''
-    def __init__(self, provider_name, base_url, default_lang = "EN"):
-        self.name = provider_name
+    def __init__(self, provider_name, base_url, logger_name, default_lang = "EN"):
         self.base_url = base_url
         self.default_lang = default_lang
-        self.logger = logging.getLogger(name)
+        self.logger = logging.getLogger(logger_name)
 
 
     def scrape_page(self, url, soup="yes"):
@@ -89,7 +92,7 @@ class Provider:
             elif provider_name == 'allsubdb':
                 return PROVIDERS_SUPPORTED_LANGUAGES['allsubdb']
         else:
-            print("Invalid provider name specified."")
+            print("Invalid provider name specified.")
 
 
     def downloader(self, download_url, filename):
@@ -102,8 +105,11 @@ class Provider:
         filename     :: Filename for the subtitle file
         '''
         r = requests.get(download_url, stream=True)
+        if not filename:
+            filename = re.findall("filename=(.+)", r.headers['content-disposition'])[0]
         if r.status_code == 200:
             with open(filename, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=150):
                     if chunk:
                         f.write(chunk)
+        return filename
