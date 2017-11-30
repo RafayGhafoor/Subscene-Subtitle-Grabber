@@ -22,7 +22,6 @@ def zip_extractor(name):
 class LanguageNotSupported(IndexError):
     print("Language Not Supported.")
 
-
 class Subscene(Provider):
     '''Subscene class that is a subclass of Provider (base class) which
     provides functionality for interacting with the subscene site.'''

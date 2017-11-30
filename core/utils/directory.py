@@ -48,7 +48,7 @@ def get_media_files():
                     MOVIES_DIR[folders].append(i)
     # Directories which contains .srt files (Subtitles)
     for i in REMOVALS:
-        if MOVIES_DIR.get(i): # a check for the presence of key which can be already removed or not present
+        if i in MOVIES_DIR: # a check for the presence of key which can be already removed or not present
             del(MOVIES_DIR[i])
 
 
