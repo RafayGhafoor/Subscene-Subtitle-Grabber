@@ -17,31 +17,26 @@ def zip_extractor(name):
             z.extractall(".")
         os.remove(name)
     except Exception as e:
-        logger.warning("Zip Extractor Error: %s" % (e))
+        self.logger.warning("Zip Extractor Error: %s" % (e))
 
-class LanguageNotSupported(IndexError):
-    print("Language Not Supported.")
+class LanguageNotSupported(Exception):
+    def __init__(self, language):
+        self.language = language
+        super(LanguageNotSupported, self).__init__(self, '{} is not supported by the provider.'.format(language))
+
 
 class Subscene(Provider):
     '''Subscene class that is a subclass of Provider (base class) which
     provides functionality for interacting with the subscene site.'''
 
-    LANGUAGES = {'subscene':
-                 ('Arabic', 'Burmese','Danish',
-                 'Dutch', 'English', 'Farsi_persian',
-                 'Indonesian', 'Italian', 'Malay',
-                 'Spanish', 'Vietnamese')}
-
-
-    def __init__(self, base_url, logger_name="Subscene", default_lang="English", mode="prompt"):
-        super(Subscene, self).__init__(base_url, default_lang, logger_name)
+    def __init__(self, base_url, logger_name="Subscene", lang="English", mode="prompt"):
+        super(Subscene, self).__init__(base_url, lang, logger_name)
         self.mode = mode
-        self.lang = default_lang
-        print(self.lang in self.LANGUAGES['subscene'])
-        if self.lang not in self.LANGUAGES['subscene']:
-            print("e")
-            raise LanguageNotSupported
-        self.lang = default_lang
+        self.lang = lang
+        self.provider_lang = self.get_lang('subscene')
+        if self.lang not in self.provider_lang:
+            raise LanguageNotSupported(lang)
+        self.lang = lang
 
 
     def silent_mode(self, title_name, category, name=''):
@@ -94,15 +89,15 @@ class Subscene(Provider):
         for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
             title_text = x.text.strip()
             titles_and_links[title_text] = x.a.get("href")
-            print("({}): {}".format(i, title_text.encode("ascii", "ignore")))
+            print("({}): {}".format(i, title_text))
             media_titles.append(title_text)
 
         try:
-            qs = int(raw_input("\nPlease Enter Movie Number: "))
+            qs = int(input("\nPlease Enter Movie Number: "))
             return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + self.lang
 
         except Exception as e:
-            logger.warning("Movie Skipped - %s" % (e))
+            self.logger.warning("Movie Skipped - %s" % (e))
             # If pressed Enter, movie is skipped.
             return
 
@@ -116,19 +111,19 @@ class Subscene(Provider):
         URL EXAMPLE:
         https://subscene.com/subtitles/title?q=Doctor.Strange
         '''
-        logger.info("Selecting title for name: %s" % (name))
+        self.logger.info("Selecting title for name: %s" % (name))
         if not name:
             print("Invalid Input.")
             return
 
-        soup = self.scrape_page(url=SUB_QUERY, parameter=name)
-        logger.info("Searching in query: %s" % (SUB_QUERY + "/?q=" + name))
+        soup = self.scrape_page(self.url_format(base_url=SUB_QUERY, query=name, replacor="."))
+        self.logger.info("Searching in query: %s" % (SUB_QUERY + "/?q=" + name))
 
         try:
             if not soup.find("div", {"class": "byTitle"}):
                 # URL EXAMPLE (RETURNED):
                 # https://subscene.com/subtitles/release?q=pele.birth.of.the.legend
-                logger.info("Searching in release query: %s" % (SUB_QUERY + '?q=' + name.replace(' ', '.')))
+                self.logger.info("Searching in release query: %s" % (SUB_QUERY + '?q=' + name.replace(' ', '.')))
                 return SUB_QUERY + '?q=' + name.replace(' ', '.')
 
             elif soup.find("div", {"class": "byTitle"}):
@@ -138,18 +133,18 @@ class Subscene(Provider):
                     return
 
         except Exception as e:
-            logger.debug("Returning - %s" % (e))
+            self.logger.debug("Returning - %s" % (e))
             return
 
         title_lst = soup.findAll("div", {"class": "search-result"}) # Creates a list of titles
         for titles in title_lst:
             popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
             if self.mode == "prompt":
-                logger.info("Running in PROMPT mode.")
-                return cli_mode(titles, category=popular)
+                self.logger.info("Running in PROMPT mode.")
+                return self.cli_mode(titles, category=popular)
             else:
-                logger.info("Running in SILENT mode.")
-                return silent_mode(titles, category=popular, name=name.replace('.', ' '))
+                self.logger.info("Running in SILENT mode.")
+                return self.silent_mode(titles, category=popular, name=name.replace('.', ' '))
 
 
     # Select Subtitles
@@ -210,5 +205,9 @@ class Subscene(Provider):
 
 
 if __name__ == '__main__':
-    SUB_QUERY = "https://subscene.com/subtitles/release"
+    SUB_QUERY = "https://subscene.com/subtitles/release/?q="
     subscene = Subscene(base_url=SUB_QUERY)
+    sub_link = subscene.sel_title(name="Doctor Strange")
+    if sub_link:
+        for i in subscene.sel_sub(page=sub_link, name="Doctor Strange"):
+            subscene.dl_sub(i)

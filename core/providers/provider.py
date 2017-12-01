@@ -1,17 +1,24 @@
 '''
 A provider base class which defines template for the subtitle sites.
 '''
+import re
 import logging
 import requests
 import bs4
+
+class ProviderNotSupported(Exception):
+    def __init__(self, provider):
+        self.provider = provider
+        super(ProviderNotSupported, self).__init__(self, 'Provider {} not found.'.format(provider))
+
 
 class Provider:
     '''
     A base class for providers.
     '''
-    def __init__(self, provider_name, base_url, logger_name, default_lang = "EN"):
+    def __init__(self, provider_name, base_url, logger_name, lang="EN"):
         self.base_url = base_url
-        self.default_lang = default_lang
+        self.default_lang = lang
         self.logger = logging.getLogger(logger_name)
 
 
@@ -26,8 +33,9 @@ class Provider:
         '''
         HEADERS = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
         req = requests.get(url, headers=HEADERS)
+        print(req.url)
         if req.status_code != 200:
-            logger.debug("{} not retrieved. Status code {} returned.".format(req.url, req.status_code))
+            self.logger.debug("{} not retrieved. Status code {} returned.".format(req.url, req.status_code))
             return
         if soup == "yes":
             req_html = bs4.BeautifulSoup(req.content, "lxml")
@@ -81,16 +89,15 @@ class Provider:
             # If provider name is provided in the form of 'Subscene' or
             # 'SUBSCENE', doesn't break.
             provider_name = provider_name.lower()
-
         if provider_name == 'subscene':
             return PROVIDERS_SUPPORTED_LANGUAGES['subscene']
         elif provider_name == 'allsubdb':
             return PROVIDERS_SUPPORTED_LANGUAGES['allsubdb']
         else:
-            print("Invalid provider name specified.")
+            raise ProviderNotSupported(provider_name)
 
 
-    def downloader(self, download_url, filename):
+    def downloader(self, download_url, filename=""):
         '''
         A downloader method which is used by every provider.
 
