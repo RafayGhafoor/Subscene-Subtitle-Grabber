@@ -33,7 +33,6 @@ class Provider:
         '''
         HEADERS = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
         req = requests.get(url, headers=HEADERS)
-        print(req.url)
         if req.status_code != 200:
             self.logger.debug("{} not retrieved. Status code {} returned.".format(req.url, req.status_code))
             return
