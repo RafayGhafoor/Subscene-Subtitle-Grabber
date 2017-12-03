@@ -16,8 +16,7 @@ class Provider:
     '''
     A base class for providers.
     '''
-    def __init__(self, provider_name, base_url, logger_name, lang="EN"):
-        self.base_url = base_url
+    def __init__(self, provider_name, logger_name, lang="EN"):
         self.default_lang = lang
         self.logger = logging.getLogger(logger_name)
 
