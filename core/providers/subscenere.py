@@ -43,25 +43,32 @@ class Subscene(Provider):
 
 
     def get_title(self, page_url):
+        '''
+        Obtain titles with corresponding links from the subscene page.
+
+        Example of the page from the titles are scraped:-
+        >>> https://subscene.com/subtitles/title?q=Doctor.Strange
+
+        Parameters:
+        page_url: Page url to get titles from.
+        '''
         # No need to scrape page if the base url is directed towards release query
         if page_url.startswith(Subscene.base_url_release):
             return
-
-        menu = {} # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
+        # name of the titles:
+        titles = [] # "Person of interest Fifth Season"
+        # links to subtitles page:
+        sub_links = []  # "/subtitles/person-of-interest-season-5"
         soup = self.scrape_page(page_url)
-        page = soup.findAll("div", {"class": "search-result"}) # Titles menu
-        for titles in page:
-            exact = titles.find("h2", {"class": "exact"}) # Searches in the exact tag
-            popular = titles.find("h2", {"class": "popular"}) # Searches in the popular tag
-            # for x in popular.find_all_next("div", {"class": "title"}):
-            #     title_text = x.text.strip()
-            #     titles_and_links[title_text] = x.a.get("href")
+        page = soup.findAll("div", class_="title") # Titles menu
 
+        for links in page:
+            # The subscene titles page include titles in three categories i.e,
+            # Popular, Exact, TV-Series (We ignore the close category).
+            if links.a.get('href') not in sub_links:
+                # A check to filter duplicate urls of the same name since they
+                # are scattered in different categories.
+                titles.append(links.text.strip())
+                sub_links.append(links.a.get('href'))
 
-if __name__ == '__main__':
-    subscene = Subscene()
-    subscene.get_title("https://subscene.com/subtitles/title?q=person+of+interest&l=")
-    # sub_link = subscene.sel_title(name="Doctor Strange")
-    # if sub_link:
-    #     for i in subscene.sel_sub(page=sub_link, name="Doctor Strange"):
-    #         subscene.dl_sub(i)
+        return (titles, sub_links)
