@@ -33,8 +33,9 @@ class Subscene(Provider):
     # To Force searching in release page add, &r=true as a parameter in
     # base_url_release
 
-    def __init__(self, logger_name="Subscene", lang="English"):
+    def __init__(self, name, logger_name="Subscene", lang="English"):
         super(Subscene, self).__init__(lang, logger_name)
+        self.name = name
         self.lang = lang
         self.provider_lang = self.get_lang('subscene')
         if self.lang not in self.provider_lang:
@@ -72,3 +73,27 @@ class Subscene(Provider):
                 sub_links.append(links.a.get('href'))
 
         return (titles, sub_links)
+
+
+    def get_sub(self, page_url):
+        '''
+        Obtain subtitles from the release page.
+
+        Example of the page from the titles are scraped:-
+        >>> https://subscene.com/subtitles/doctor-strange-2016
+
+        Parameters:
+        page_url: link to scrap subtitles from.
+        '''
+        soup = self.scrape_page(page_url)
+        language, release_url = [], []
+        current_sub = 0
+        for link in soup.find_all('td', {'class': 'a1'}):
+            if 'trailer' not in link.text.lower():
+                if link.find('a').get('href') not in release_url:
+                    language.append(link.find('span').text.strip())
+                    release_url.append(link.find('a').get('href'))
+
+if __name__ == '__main__':
+    subscene = Subscene('something')
+    subscene.get_sub("https://subscene.com/subtitles/doctor-strange-2016")
