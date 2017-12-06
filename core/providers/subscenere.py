@@ -56,26 +56,22 @@ class Subscene(Provider):
         # No need to scrape page if the base url is directed towards release query
         if page_url.startswith(Subscene.base_url_release):
             return
-        # name of the titles:
-        titles = [] # "Person of interest Fifth Season"
-        # links to subtitles page:
-        sub_links = []  # "/subtitles/person-of-interest-season-5"
+        menu = {} # name of the titles and their corresponding links.
         soup = self.scrape_page(page_url)
         page = soup.findAll("div", class_="title") # Titles menu
 
         for links in page:
             # The subscene titles page include titles in three categories i.e,
             # Popular, Exact, TV-Series (We ignore the close category).
-            if links.a.get('href') not in sub_links:
+            if links.a.get('href') not in menu:
                 # A check to filter duplicate urls of the same name since they
                 # are scattered in different categories.
-                titles.append(links.text.strip())
-                sub_links.append(links.a.get('href'))
+                menu[links.text.strip()] = links.a.get('href')
 
-        return (titles, sub_links)
+        return (menu)
 
 
-    def get_sub(self, page_url):
+    def get_sub(self, page_url, sub_count='n'):
         '''
         Obtain subtitles from the release page.
 
@@ -86,14 +82,20 @@ class Subscene(Provider):
         page_url: link to scrap subtitles from.
         '''
         soup = self.scrape_page(page_url)
-        language, release_url = [], []
+        release_info = {}   # Titles and URLS
         current_sub = 0
-        for link in soup.find_all('td', {'class': 'a1'}):
-            if 'trailer' not in link.text.lower():
-                if link.find('a').get('href') not in release_url:
-                    language.append(link.find('span').text.strip())
-                    release_url.append(link.find('a').get('href'))
 
+        for link in soup.find_all('td', {'class': 'a1'}):
+            contents = link.contents[1]
+            cleanize = lambda s: s.text.lower().strip()
+            url = "https://subscene.com" + contents.get('href')
+            release_lang = cleanize(contents.span)
+            title = cleanize(contents.span.find_next_sibling("span"))
+            if 'trailer' not in title and self.lang.lower() in release_lang:
+                if title not in release_info:
+                    release_info[title] = url
+        print(release_info)
+        return release_info
 if __name__ == '__main__':
     subscene = Subscene('something')
     subscene.get_sub("https://subscene.com/subtitles/doctor-strange-2016")
