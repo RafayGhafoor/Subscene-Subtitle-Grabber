@@ -18,6 +18,7 @@ def zip_extractor(name):
     except Exception as e:
         self.logger.warning("Zip Extractor Error: %s" % (e))
 
+
 class LanguageNotSupported(Exception):
     def __init__(self, language):
         self.language = language
@@ -33,9 +34,8 @@ class Subscene(Provider):
     # To Force searching in release page add, &r=true as a parameter in
     # base_url_release
 
-    def __init__(self, name, logger_name="Subscene", lang="English"):
+    def __init__(self, logger_name="Subscene", lang="English"):
         super(Subscene, self).__init__(lang, logger_name)
-        self.name = name
         self.lang = lang
         self.provider_lang = self.get_lang('subscene')
         if self.lang not in self.provider_lang:
@@ -43,7 +43,7 @@ class Subscene(Provider):
         self.lang = lang
 
 
-    def get_title(self, page_url):
+    def get_title(self, name):
         '''
         Obtain titles with corresponding links from the subscene page.
 
@@ -54,21 +54,21 @@ class Subscene(Provider):
         page_url: Page url to get titles from.
         '''
         # No need to scrape page if the base url is directed towards release query
+        page_url = self.url_format(base_url=Subscene.base_url_title, query=name)
         if page_url.startswith(Subscene.base_url_release):
             return
         menu = {} # name of the titles and their corresponding links.
         soup = self.scrape_page(page_url)
         page = soup.findAll("div", class_="title") # Titles menu
-
         for links in page:
             # The subscene titles page include titles in three categories i.e,
             # Popular, Exact, TV-Series (We ignore the close category).
             if links.a.get('href') not in menu:
                 # A check to filter duplicate urls of the same name since they
                 # are scattered in different categories.
-                menu[links.text.strip()] = links.a.get('href')
+                menu[links.text.strip()] = "https://subscene.com" + links.a.get('href')
 
-        return (menu)
+        return menu
 
 
     def get_sub(self, page_url, sub_count='n'):
@@ -84,7 +84,7 @@ class Subscene(Provider):
         soup = self.scrape_page(page_url)
         release_info = {}   # Titles and URLS
         current_sub = 0
-        for link in soup.find_all('td', {'class': 'a1'}):
+        for link in soup.find_all('td', class_='a1'):
             if sub_count != 'n' and current_sub == sub_count:
                 break
             contents = link.contents[1]
@@ -104,7 +104,7 @@ class Subscene(Provider):
         Downloads subtitles for the media file.
         '''
         soup = self.scrape_page(page)
-        div = soup.find('div', {'class': 'download'})
+        div = soup.find('div', class_='download')
         down_link = 'https://subscene.com' + div.find('a').get('href')
         filename = self.downloader(down_link)
         zip_extractor(filename)
