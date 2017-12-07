@@ -84,18 +84,29 @@ class Subscene(Provider):
         soup = self.scrape_page(page_url)
         release_info = {}   # Titles and URLS
         current_sub = 0
-
         for link in soup.find_all('td', {'class': 'a1'}):
+            if sub_count != 'n' and current_sub == sub_count:
+                break
             contents = link.contents[1]
             cleanize = lambda s: s.text.lower().strip()
             url = "https://subscene.com" + contents.get('href')
             release_lang = cleanize(contents.span)
             title = cleanize(contents.span.find_next_sibling("span"))
             if 'trailer' not in title and self.lang.lower() in release_lang:
-                if title not in release_info:
-                    release_info[title] = url
-        print(release_info)
+                if url not in release_info and title not in release_info.values():
+                    release_info[url] = title
+                    current_sub += 1
         return release_info
-if __name__ == '__main__':
-    subscene = Subscene('something')
-    subscene.get_sub("https://subscene.com/subtitles/doctor-strange-2016")
+
+
+    def dl_sub(self, page):
+        '''
+        Downloads subtitles for the media file.
+        '''
+        soup = self.scrape_page(page)
+        div = soup.find('div', {'class': 'download'})
+        down_link = 'https://subscene.com' + div.find('a').get('href')
+        filename = self.downloader(down_link)
+        zip_extractor(filename)
+        print("Subtitle (%s) - Downloaded\n" % filename.replace('-', ' ').capitalize())
+        return filename
