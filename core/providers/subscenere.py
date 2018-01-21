@@ -4,7 +4,7 @@ import bs4
 import zipfile
 import os
 import logging
-from provider import Provider
+from provider import Provider, LanguageNotSupported
 
 def zip_extractor(name):
     '''
@@ -17,12 +17,6 @@ def zip_extractor(name):
         os.remove(name)
     except Exception as e:
         self.logger.warning("Zip Extractor Error: %s" % (e))
-
-
-class LanguageNotSupported(Exception):
-    def __init__(self, language):
-        self.language = language
-        super(LanguageNotSupported, self).__init__(self, '{} is not supported by the provider.'.format(language))
 
 
 class Subscene(Provider):

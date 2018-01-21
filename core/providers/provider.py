@@ -11,6 +11,11 @@ class ProviderNotSupported(Exception):
         self.provider = provider
         super(ProviderNotSupported, self).__init__(self, 'Provider {} not found.'.format(provider))
 
+class LanguageNotSupported(Exception):
+    def __init__(self, language):
+        self.language = language
+        super(LanguageNotSupported, self).__init__(self, '{} is not supported by the provider.'.format(language))
+
 
 class Provider:
     '''

@@ -2,39 +2,51 @@ import logging
 import os.path
 import hashlib
 import requests
+from provider import Provider, LanguageNotSupported
 
 HEADERS = {'User-agent': "SubDB/1.0 (subgrab/1.0; http://github.com/RafayGhafoor/Subscene-Subtitle-Grabber)"}
-LANGUAGES = ('en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ro', 'sv', 'tr')
-DOWNLOAD_URL = "http://api.thesubdb.com/?action=download"
-logger = logging.getLogger("subdb.py")
 
-def get_hash(name):
-    readsize = 64 * 1024
-    with open(name, 'rb') as f:
-        data = f.read(readsize)
-        f.seek(-readsize, os.SEEK_END)
-        data += f.read(readsize)
-    return hashlib.md5(data).hexdigest()
+class SubDB(Provider):
+    def __init__(self, logger_name="SubDB", lang="en"):
+        super(SubDB, self).__init__(lang, logger_name)
+        self.lang = lang
+        self.provider_lang = self.get_lang('allsubdb')
+        if self.lang not in self.provider_lang:
+            raise LanguageNotSupported(lang)
+        self.lang = lang
+        self.DOWNLOAD_URL = "http://api.thesubdb.com/?action=download"
 
+    def get_hash(self, filename):
+        readsize = 64 * 1024
+        with open(filename, 'rb') as f:
+            data = f.read(readsize)
+            f.seek(-readsize, os.SEEK_END)
+            data += f.read(readsize)
+        return hashlib.md5(data).hexdigest()
 
-def get_sub(file_hash, filename="filename.mkv", language='en'):
-    logger.info("Downloading subtitles from SubDb")
-    logger.debug("Language selected for subtitles: %s" % (language))
-    if language.lower() in LANGUAGES:
-        r = requests.get(DOWNLOAD_URL + '&hash=' + file_hash + '&language=' + language.lower(), headers=HEADERS)
-        logger.debug("Status code for %s is %s" % (filename, r.status_code))
-        if r.status_code == 200:
+    def get_sub(self, filename, language='en'):
+        self.logger.info("Downloading subtitles from SubDB")
+        self.logger.debug("Language selected for subtitles: %s" % (language))
+        r = requests.get(self.DOWNLOAD_URL + '&hash=' + self.get_hash(filename) + '&language=' + self.lang, headers=HEADERS)
+        self.logger.debug("Status code for %s is %s" % (filename, r.status_code))
+
+        if r.status_code == 404:
+            self.logger.info("[SubDB] Subtitle not found for %s" % (filename))
+
+        elif r.status_code == 200:
             with open(os.path.splitext(filename)[0] + '.srt', 'wb') as f:
                 for chunk in r.iter_content(chunk_size=150):
                     if chunk:
                         f.write(chunk)
-            logger.info("Downloaded Subtitles for %s" % (filename))
+            self.logger.info("Downloaded Subtitles for %s" % (filename))
             return 200
-        elif r.status_code == 404:
-            logger.info("[SubDB] Subtitle not found for %s" % (filename))
+
         else:
-            logger.debug("Invalid file %s" % (filename))
+            self.logger.debug("Invalid file %s" % (filename))
             print("Invalid file")
-    else:
-        print("Language not supported")
-        return
+
+if __name__ == '__main__':
+    import os
+    os.chdir(r"C:\Users\Habiba Ghafoor\Downloads\The.Mountain.Between.Us.2017.BDRip.x264-DRONES[EtMovies]")
+    s = SubDB()
+    s.get_sub(filename='The.Mountain.Between.Us.2017.BDRip.x264-DRONES[EtMovies].mkv')
