@@ -44,9 +44,3 @@ class SubDB(Provider):
         else:
             self.logger.debug("Invalid file %s" % (filename))
             print("Invalid file")
-
-if __name__ == '__main__':
-    import os
-    os.chdir(r"C:\Users\Habiba Ghafoor\Downloads\The.Mountain.Between.Us.2017.BDRip.x264-DRONES[EtMovies]")
-    s = SubDB()
-    s.get_sub(filename='The.Mountain.Between.Us.2017.BDRip.x264-DRONES[EtMovies].mkv')
