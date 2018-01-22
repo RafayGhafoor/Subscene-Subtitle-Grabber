@@ -6,6 +6,13 @@ from provider import Provider, LanguageNotSupported
 
 HEADERS = {'User-agent': "SubDB/1.0 (subgrab/1.0; http://github.com/RafayGhafoor/Subscene-Subtitle-Grabber)"}
 
+# Provider agnostic exception
+
+class InvalidFile(Exception):
+    def __init__(self, filename):
+        self.file = filename
+        super(InvalidFile, self).__init__(self, '{} is a invalid file.'.format(self.file))
+
 
 class SubDB(Provider):
 
@@ -28,7 +35,7 @@ class SubDB(Provider):
         return hashlib.md5(data).hexdigest()
 
 
-    def get_sub(self, filename, language='en'):
+    def get_sub(self, filename):
         r = requests.get(self.DOWNLOAD_URL + '&hash=' + self.get_hash(filename) + '&language=' + self.lang, headers=HEADERS)
 
         if r.status_code == 404:
@@ -41,3 +48,4 @@ class SubDB(Provider):
                         f.write(chunk)
         else:
             #TODO: raise exception.
+            raise InvalidFile
