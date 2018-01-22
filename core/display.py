@@ -2,13 +2,13 @@
 A model for interfacing with the providers.
 '''
 
-class CLI():
+class CLI:
 	'''
 	A base class that provides functionality for interacting with
 	the providers, interactively.
 	'''
 	def __init__(self, provider, category):
-		self.category = category 
+		self.category = category
 		self.provider = provider
 
 
@@ -17,7 +17,7 @@ class CLI():
 		Welcome Message displayed at every start-up
 		in command-line for providers.
 		'''
-		print("Welcome to the {} Command-Line interface".format(provider))
+		print("Welcome to the {} Command-Line Interface".format(provider))
 
 
 	def quit(self, provider):
@@ -31,7 +31,7 @@ class CLI():
 		'''
 		A table that displays menu for the subtitles
 		in Lang | Release Name | Rating order.
-		
+
 		Parameters:
 
 		language: Language of the subtitle.

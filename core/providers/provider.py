@@ -2,7 +2,6 @@
 A provider base class which defines template for the subtitle sites.
 '''
 import re
-import logging
 import requests
 import bs4
 
@@ -10,6 +9,7 @@ class ProviderNotSupported(Exception):
     def __init__(self, provider):
         self.provider = provider
         super(ProviderNotSupported, self).__init__(self, 'Provider {} not found.'.format(provider))
+
 
 class LanguageNotSupported(Exception):
     def __init__(self, language):
@@ -23,7 +23,6 @@ class Provider:
     '''
     def __init__(self, provider_name, logger_name, lang="EN"):
         self.default_lang = lang
-        self.logger = logging.getLogger(logger_name)
 
 
     def scrape_page(self, url, soup="yes"):
@@ -38,7 +37,7 @@ class Provider:
         HEADERS = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
         req = requests.get(url, headers=HEADERS)
         if req.status_code != 200:
-            self.logger.debug("{} not retrieved. Status code {} returned.".format(req.url, req.status_code))
+            # self.logger.debug("{} not retrieved. Status code {} returned.".format(req.url, req.status_code))
             return
         if soup == "yes":
             req_html = bs4.BeautifulSoup(req.content, "lxml")
@@ -89,8 +88,7 @@ class Provider:
                     )
         }
         if not provider_name.islower():
-            # If provider name is provided in the form of 'Subscene' or
-            # 'SUBSCENE', doesn't break.
+            # An implicit string case-handling.
             provider_name = provider_name.lower()
         if provider_name == 'subscene':
             return PROVIDERS_SUPPORTED_LANGUAGES['subscene']

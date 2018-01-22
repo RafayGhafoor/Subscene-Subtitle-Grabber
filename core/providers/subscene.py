@@ -1,38 +1,35 @@
+'''A minimal API for subscene site.'''
 import requests
 import re
 import bs4
 import zipfile
 import os
-import logging
-from provider import Provider
+
+from provider import Provider, LanguageNotSupported
 
 
 def zip_extractor(name):
-    '''
-    Extracts zip file obtained from the Subscene site (which contains subtitles).
-    '''
+    '''Extract zip file obtained from the subscene site.'''
     try:
         with zipfile.ZipFile(name, "r") as z:
-            # srt += [i for i in ZipFile.namelist() if i.endswith('.srt')][0]
             z.extractall(".")
         os.remove(name)
     except Exception as e:
-        self.logger.warning("Zip Extractor Error: %s" % (e))
-
-
-class LanguageNotSupported(Exception):
-    def __init__(self, language):
-        self.language = language
-        super(LanguageNotSupported, self).__init__(self, '{} is not supported by the provider.'.format(language))
+        # TODO: Write log message.
+        pass
 
 
 class Subscene(Provider):
     '''Subscene class that is a subclass of Provider (base class) which
     provides functionality for interacting with the subscene site.'''
 
-    def __init__(self, base_url, logger_name="Subscene", lang="English", mode="prompt"):
-        super(Subscene, self).__init__(base_url, lang, logger_name)
-        self.mode = mode
+    base_url_release = "https://subscene.com/subtitles/release/?q="
+    base_url_title = "https://subscene.com/subtitles/title?q="
+    # To force searching in release page add, &r=true as a parameter in
+    # base_url_release (var)
+
+    def __init__(self, logger_name="Subscene", lang="English"):
+        super(Subscene, self).__init__(lang, logger_name)
         self.lang = lang
         self.provider_lang = self.get_lang('subscene')
         if self.lang not in self.provider_lang:
@@ -40,175 +37,69 @@ class Subscene(Provider):
         self.lang = lang
 
 
-    def silent_mode(self, title_name, category, name=''):
+    def get_title(self, name):
         '''
-        An automatic mode for selecting media title from subscene site.
-        :param title_name: title names obtained from get_title function.
+        Obtain titles with corresponding links from the subscene page.
+
+        Example of the page from the titles are scraped:-
+        >>> https://subscene.com/subtitles/title?q=Doctor.Strange
+
+        Parameters:
+        page_url: Page url to get titles from.
         '''
-
-        def html_navigator(sort_by="Popular"):
-         '''
-         Navigates html tree and select title from it. This function is
-         called twice. For example, the default (Popular) category for
-         searching in is Popular. It will search title first in popular
-         category and then in other categories. If default category
-         changes, this process is reversed.
-         :param category: selects which category should be searched first in
-         the html tree.
-         '''
-         if sort_by == "Popular": # Searches in Popular Category and the categories next to it.
-             section = category.find_all_next("div", {"class": "title"})
-         else: # Searches in categories above popular tag.
-             section = title_name.find_all("div", {"class": "title"})
-         for results in section:
-             match = 1
-             for letter in name.split():
-                 if letter.lower() in results.a.text.lower():
-                    #  print "NAME: %s, RESULT: %s, MATCH: %s" % (letter, results.a.text, match)
-                    # Loops through the name (list) and if all the elements of the
-                    # list are present in result, returns the link.
-                     if match == len(name.split()):
-                         return "https://subscene.com" + results.a.get("href") + "/" + self.lang
-                     match += 1
-
-        # Searches first in Popular category, if found, returns the title name
-        obt_link = html_navigator(sort_by="Popular")
-        if not obt_link:    # If not found in the popular category, searches in other category
-            return html_navigator(sort_by="other_than_popular")
-        return obt_link
-
-
-    def cli_mode(self, titles_name, category):
-        '''
-        A manual mode driven by user, allows user to select subtitles manually
-        from the command-line.
-        :param titles_name: title names obtained from get_title function.
-        '''
-        media_titles = [] # Contains key names of titles_and_links dictionary.
-        titles_and_links = {} # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
-
-        for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
-            title_text = x.text.strip()
-            titles_and_links[title_text] = x.a.get("href")
-            print("({}): {}".format(i, title_text))
-            media_titles.append(title_text)
-
-        try:
-            qs = int(input("\nPlease Enter Movie Number: "))
-            return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + self.lang
-
-        except Exception as e:
-            self.logger.warning("Movie Skipped - %s" % (e))
-            # If pressed Enter, movie is skipped.
+        # No need to scrape page if the base url is directed towards release query
+        page_url = self.url_format(base_url=Subscene.base_url_title, query=name)
+        if page_url.startswith(Subscene.base_url_release):
             return
+        menu = {} # name of the titles and their corresponding links.
+        soup = self.scrape_page(page_url)
+        page = soup.findAll("div", class_="title") # Titles menu
+        for links in page:
+            # The subscene titles page include titles in three categories i.e,
+            # Popular, Exact, TV-Series (We ignore the close category).
+            if links.a.get('href') not in menu:
+                # A check to filter duplicate urls of the same name since they
+                # are scattered in different categories.
+                menu[links.text.strip()] = "https://subscene.com" + links.a.get('href')
+
+        return menu
 
 
-    def sel_title(self, name):
+    def get_sub(self, page_url, sub_count='n'):
         '''
-        Select title of the media (i.e., Movie, TV-Series)
-        :param title_lst: Title Names from the function get_title
-        :param name: Media Name. For Example: "Doctor Strange"
-        :param mode: Select CLI Mode or Silent Mode.
-        URL EXAMPLE:
-        https://subscene.com/subtitles/title?q=Doctor.Strange
+        Obtain subtitles from the release page.
+
+        Example of the page from the titles are scraped:-
+        >>> https://subscene.com/subtitles/doctor-strange-2016
+
+        Parameters:
+        page_url: link to scrap subtitles from.
         '''
-        self.logger.info("Selecting title for name: %s" % (name))
-        if not name:
-            print("Invalid Input.")
-            return
-
-        soup = self.scrape_page(self.url_format(base_url=SUB_QUERY, query=name, replacor="."))
-        self.logger.info("Searching in query: %s" % (SUB_QUERY + "/?q=" + name))
-
-        try:
-            if not soup.find("div", {"class": "byTitle"}):
-                # URL EXAMPLE (RETURNED):
-                # https://subscene.com/subtitles/release?q=pele.birth.of.the.legend
-                self.logger.info("Searching in release query: %s" % (SUB_QUERY + '?q=' + name.replace(' ', '.')))
-                return SUB_QUERY + '?q=' + name.replace(' ', '.')
-
-            elif soup.find("div", {"class": "byTitle"}):
-                # for example, if 'abcedesgg' is search-string
-                if soup.find('div', {"class": "search-result"}).h2.string == "No results found":
-                    print("Sorry, the subtitles for this media file aren't available.")
-                    return
-
-        except Exception as e:
-            self.logger.debug("Returning - %s" % (e))
-            return
-
-        title_lst = soup.findAll("div", {"class": "search-result"}) # Creates a list of titles
-        for titles in title_lst:
-            popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
-            if self.mode == "prompt":
-                self.logger.info("Running in PROMPT mode.")
-                return self.cli_mode(titles, category=popular)
-            else:
-                self.logger.info("Running in SILENT mode.")
-                return self.silent_mode(titles, category=popular, name=name.replace('.', ' '))
-
-
-    # Select Subtitles
-    def sel_sub(self, page, sub_count=1, name=""):
-        '''
-        Select subtitles from the movie page.
-        :param sub_count: Number of subtitles to be downloaded.
-        URL EXAMPLE:
-        https://subscene.com/subtitles/release?q=pele.birth.of.the.legend
-        '''
-        # start_time = time.time()
-        soup = self.scrape_page(page)
-        sub_list = []
+        soup = self.scrape_page(page_url)
+        release_info = {}   # Titles and URLS
         current_sub = 0
-        for link in soup.find_all('td', {'class': 'a1'}):
-            link = link.find('a')
-            if current_sub < sub_count and 'trailer' not in link.text.lower()\
-                            and link.get('href') not in sub_list and\
-                            self.lang in link.text:
-                # if movie = Doctor.Strange.2016, this first condition is not
-                # going to be executed because the length of the list will be 0
-                # we format the name by replacing dots with spaces, which will
-                # split it into the length of the list of two elements (0,1,2)
-                formatted_name = name.replace('.', ' ').split()
-                if name.lower() in link.text.lower():
-                    sub_list.append(link.get('href'))
+        for link in soup.find_all('td', class_='a1'):
+            if sub_count != 'n' and current_sub == sub_count:
+                break
+            contents = link.contents[1]
+            cleanize = lambda s: s.text.lower().strip()
+            url = "https://subscene.com" + contents.get('href')
+            release_lang = cleanize(contents.span)
+            title = cleanize(contents.span.find_next_sibling("span"))
+            if 'trailer' not in title and self.lang.lower() in release_lang:
+                if url not in release_info and title not in release_info.values():
+                    release_info[url] = title
                     current_sub += 1
-
-                if len(name.split()) > 1:
-                    if name.split()[1].lower() in link.text.lower() or \
-                            name.split()[0].lower() in link.text.lower():
-                        sub_list.append(link.get('href'))
-                        current_sub += 1
-
-                elif len(formatted_name) > 1:
-                    if formatted_name[0].lower() in link.text.lower() or \
-                            formatted_name[1].lower() in link.text.lower():
-                        sub_list.append(link.get('href'))
-                        current_sub += 1
-
-        # print("--- sel_sub took %s seconds ---" % (time.time() - start_time))
-        return ['https://subscene.com' + i for i in sub_list]
+        return release_info
 
 
     def dl_sub(self, page):
         '''
-        Download subtitles obtained from the select_subtitle
-        function i.e., movie subtitles links.
+        Downloads subtitles for the media file.
         '''
-        # start_time = time.time()
         soup = self.scrape_page(page)
-        div = soup.find('div', {'class': 'download'})
+        div = soup.find('div', class_='download')
         down_link = 'https://subscene.com' + div.find('a').get('href')
         filename = self.downloader(down_link)
         zip_extractor(filename)
-        print("Subtitle (%s) - Downloaded\n" % filename.replace('-', ' ').capitalize())
-        # print("--- download_sub took %s seconds ---" % (time.time() - start_time))
-
-
-if __name__ == '__main__':
-    SUB_QUERY = "https://subscene.com/subtitles/release/?q="
-    subscene = Subscene(base_url=SUB_QUERY)
-    sub_link = subscene.sel_title(name="Doctor Strange")
-    if sub_link:
-        for i in subscene.sel_sub(page=sub_link, name="Doctor Strange"):
-            subscene.dl_sub(i)
+        return filename
