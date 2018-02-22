@@ -26,25 +26,23 @@ def create_dirs():
                           # contains characters out of the ordinal range
 
 
-def get_media(location='.'):
+def get_media(crawl_dir='.'):
     '''Get media files from the current directory.'''
-    movies = {}     # Contains Movies Directories (keys) and the
+    movies = {}     # Contains movies directories path (keys) and the
                      # files inside them (values = [list])
     srt_files = []  # Contains files with subtitles already
 
-    for folders, _, files in os.walk(location):
+    for folders, _, files in os.walk(crawl_dir):
         for media in files:
             folders = folders.replace(('.' + os.sep), '')   # Cleans path by removing leading relative path.
+            # scans directory for media files and those which have subtitles
             if os.path.splitext(media)[1] in EXT:
                 if folders not in movies:
                     movies[folders] = []
                 movies[folders].append(media)
+
             elif media.endswith('.srt'):
                 srt_files.append(folders.replace('.' + os.sep, ''))
 
-    # Clean movies which already have subtitles.
-    for movie_with_sub in srt_files:
-        if movie_with_sub in movies:
-            del movies[movie_with_sub]
-
-    return movies
+    # returns media files which doesn't have subtitles
+    return {k: v for k, v in movies.items() if k not in srt_files}

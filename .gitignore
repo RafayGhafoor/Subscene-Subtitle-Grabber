@@ -1,3 +1,5 @@
+project_architecture.txt
+roadmap.txt
 #PYCHARM
 
 .idea/
@@ -104,5 +106,5 @@ ENV/
 # mypy
 .mypy_cache/
 
-#custom 
+#custom
 s.py

@@ -24,7 +24,7 @@ class CLI:
 		'''
 		An exit message displayed at exiting from the CLI.
 		'''
-		print("Exiting from the provider.")
+		print("Exiting from the {} provider.".format(provider))
 
 
 	def sub_menu(self, language, release_name, rating):

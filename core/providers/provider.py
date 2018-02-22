@@ -2,6 +2,7 @@
 A provider base class which defines template for the subtitle sites.
 '''
 import re
+
 import requests
 import bs4
 
@@ -21,7 +22,7 @@ class Provider:
     '''
     A base class for providers.
     '''
-    def __init__(self, provider_name, logger_name, lang="EN"):
+    def __init__(self, provider_name, lang="EN"):
         self.default_lang = lang
 
 
@@ -87,9 +88,11 @@ class Provider:
                     'tr'
                     )
         }
+
         if not provider_name.islower():
             # An implicit string case-handling.
             provider_name = provider_name.lower()
+
         if provider_name == 'subscene':
             return PROVIDERS_SUPPORTED_LANGUAGES['subscene']
         elif provider_name == 'allsubdb':
@@ -108,11 +111,14 @@ class Provider:
         filename     :: Filename for the subtitle file
         '''
         r = requests.get(download_url, stream=True)
+
         if not filename:
             filename = re.findall("filename=(.+)", r.headers['content-disposition'])[0]
+
         if r.status_code == 200:
             with open(filename, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=150):
                     if chunk:
                         f.write(chunk)
+
         return filename

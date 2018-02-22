@@ -1,5 +1,6 @@
 import os.path
 import hashlib
+
 import requests
 
 from provider import Provider, LanguageNotSupported
@@ -16,8 +17,8 @@ class InvalidFile(Exception):
 
 class SubDB(Provider):
 
-    def __init__(self, logger_name="SubDB", lang="en"):
-        super(SubDB, self).__init__(lang, logger_name)
+    def __init__(self, lang="en"):
+        super(SubDB, self).__init__(lang)
         self.lang = lang
         self.provider_lang = self.get_lang('allsubdb')
         if self.lang not in self.provider_lang:
