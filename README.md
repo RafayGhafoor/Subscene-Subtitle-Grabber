@@ -2,8 +2,6 @@
 
 A utility which provides an ease for automating media i.e., Movies, TV-Series subtitle scraping from multiple providers.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f1ddff652d14f60bbf2f8d0b6c11cc8)](https://www.codacy.com/app/RafayGhafoor/Subscene-Subtitle-Grabber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RafayGhafoor/Subscene-Subtitle-Grabber&amp;utm_campaign=Badge_Grade)
-
 # Index:
 * [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#installation)
 * [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#requirements)
