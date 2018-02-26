@@ -92,7 +92,7 @@ subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 
 # Changelog:
 
-* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber/blob/dev/changelog.rst)
+* [Changelog](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber/blob/master/changelog.rst)
 
 # Note:
 
