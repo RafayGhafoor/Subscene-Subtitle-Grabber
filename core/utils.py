@@ -37,9 +37,3 @@ def scan_media(crawl_dir='.'):
 
     return {k: [i for ext in EXT for i in v if i.endswith(ext)] for k,v in movies.items()}
 
-
-
-if __name__ == '__main__':
-    os.chdir('/home/rafay/Desktop/Movies')
-    for k,v in scan_media().items():
-        print('{}\t{}'.format(k,v))
