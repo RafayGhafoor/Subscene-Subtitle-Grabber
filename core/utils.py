@@ -2,16 +2,11 @@ import shutil
 import os
 
 EXT = ['.mp4', '.mkv', '.avi', '.flv']
+SUB_EXT = ['.srt', '.ass']
 
 
-def create_dirs():
-    '''
-    Search for video extensions inside the current
-    directory and If any of the files ending with such
-    extensions are found (not in folder), create folder
-    for them and paste the respective file in the corresponding
-    folder.
-    '''
+def fix_media():
+    '''Search for media extensions in current directory and move them in a folder.'''
     for files in [i for extension in EXT for i in os.listdir('.') if extension in i]:
         for extension in EXT:
             if files.endswith(extension):
@@ -26,23 +21,25 @@ def create_dirs():
                           # contains characters out of the ordinal range
 
 
-def get_media(crawl_dir='.'):
-    '''Get media files from the current directory.'''
-    movies = {}     # Contains movies directories path (keys) and the
-                     # files inside them (values = [list])
-    srt_files = []  # Contains files with subtitles already
+def scan_media(crawl_dir='.'):
+    '''Scans media files (without subtitles) in current directory.'''
+    movies = {}     # media path --> keys
+                    # media files (inside that path) --> values (a list)
 
     for folders, _, files in os.walk(crawl_dir):
-        for media in files:
+        if all(map(lambda media_ext: os.path.splitext(media_ext)[1] not in SUB_EXT, files)) and files:
             folders = folders.replace(('.' + os.sep), '')   # Cleans path by removing leading relative path.
-            # scans directory for media files and those which have subtitles
-            if os.path.splitext(media)[1] in EXT:
-                if folders not in movies:
-                    movies[folders] = []
-                movies[folders].append(media)
 
-            elif media.endswith('.srt'):
-                srt_files.append(folders.replace('.' + os.sep, ''))
+            if folders not in movies:
+                movies[folders] = []
 
-    # returns media files which doesn't have subtitles
-    return {k: v for k, v in movies.items() if k not in srt_files}
+            movies[folders].extend(files)
+
+    return {k: [i for ext in EXT for i in v if i.endswith(ext)] for k,v in movies.items()}
+
+
+
+if __name__ == '__main__':
+    os.chdir('/home/rafay/Desktop/Movies')
+    for k,v in scan_media().items():
+        print('{}\t{}'.format(k,v))

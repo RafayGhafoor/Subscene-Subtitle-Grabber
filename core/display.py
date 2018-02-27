@@ -8,11 +8,11 @@ class CLI:
 	the providers, interactively.
 	'''
 	def __init__(self, provider, category):
-		self.category = category
 		self.provider = provider
+		self.category = category
 
 
-	def welcome(self, provider):
+	def welcome(self, provider: str):
 		'''
 		Welcome Message displayed at every start-up
 		in command-line for providers.
@@ -20,14 +20,14 @@ class CLI:
 		print("Welcome to the {} Command-Line Interface".format(provider))
 
 
-	def quit(self, provider):
+	def quit(self, provider: str):
 		'''
 		An exit message displayed at exiting from the CLI.
 		'''
 		print("Exiting from the {} provider.".format(provider))
 
 
-	def sub_menu(self, language, release_name, rating):
+	def sub_menu(self, language: str, release_name: lst, rating: str):
 		'''
 		A table that displays menu for the subtitles
 		in Lang | Release Name | Rating order.

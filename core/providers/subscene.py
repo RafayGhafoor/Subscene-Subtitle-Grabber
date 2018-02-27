@@ -91,13 +91,13 @@ class Subscene(Provider):
 
             contents = link.contents[1]
             cleanize = lambda s: s.text.lower().strip()
-            url = "https://subscene.com" + contents.get('href')
+            url = contents.get('href').split('/')[-1]
             release_lang = cleanize(contents.span)
             title = cleanize(contents.span.find_next_sibling("span"))
 
             if 'trailer' not in title and self.lang.lower() in release_lang:
-                if url not in release_info and title not in release_info.values():
-                    release_info[url] = title
+                if url not in release_info.values() and title not in release_info:
+                    release_info[title] = url
                     current_sub += 1
 
         return release_info
@@ -109,8 +109,7 @@ class Subscene(Provider):
         '''
         soup = self.scrape_page(page)
         div = soup.find('div', class_='download')
-        down_link = 'https://subscene.com' + div.find('a').get('href')
-        filename = self.downloader(down_link)
+        filename = self.downloader('https://subscene.com' + div.find('a').get('href'))
         zip_extractor(filename)
 
         return filename
