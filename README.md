@@ -1,4 +1,5 @@
 # SubGrab - Command-line Subtitles Downloader:
+[![Downloads](http://pepy.tech/badge/subgrab)](http://pepy.tech/count/subgrab)
 
 A utility which provides an ease for automating media i.e., Movies, TV-Series subtitle scraping from multiple providers.
 
