@@ -32,10 +32,6 @@ python setup.py install
 
 `pip install subgrab`
 
-# Preview:
-
-[![asciicast](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5.png)](https://asciinema.org/a/4tZ08jjH7yeITtYK6bpsrH5c5?speed=2)
-
 # Providers Supported:
 Following sites can be used for subtitle downloading:
 
