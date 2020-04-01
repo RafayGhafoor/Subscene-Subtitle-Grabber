@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "subgrab"
-version = "1.0.0"
+version = "1.0.2"
 description = "Automate subtitles fetching"
 authors = ["Rafay Ghafoor <rafayghafoor@protonmail.com>"]
 license = "MIT"

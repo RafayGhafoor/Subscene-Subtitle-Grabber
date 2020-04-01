@@ -5,12 +5,15 @@ Sub-Grab Changelog
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
 :Copyright: © 2020, Rafay Ghafoor.
 :Date: 2020-04-01
-:Version: 0.20
+:Version: 1.0.2
 
 .. index:: CHANGELOG
 
 Version History
 ===============
+1.0.2 / 2020-04-01
+    * Fixed dependencies
+
 1.0.0 / 2020-04-01
     * Initial Release
 

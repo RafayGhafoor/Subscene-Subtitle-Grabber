@@ -18,7 +18,7 @@ A utility which provides an ease for automating media i.e., Movies, TV-Series su
 
 # Status/Version:
 
-* Current Version: 1.0.0
+* Current Version: 1.0.2
 
 # Installation:
 

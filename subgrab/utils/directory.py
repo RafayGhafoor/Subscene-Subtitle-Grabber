@@ -1,9 +1,9 @@
 import logging
 import os
 import shutil
+from typing import Dict, List
 
 from subgrab.providers import subdb, subscene
-from typings import Dict, List
 
 
 logger = logging.getLogger("directory.py")
