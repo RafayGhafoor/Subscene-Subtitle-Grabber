@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "subgrab"
+version = "1.0.0"
+description = "Automate subtitles fetching"
+authors = ["Rafay Ghafoor <rafayghafoor@protonmail.com>"]
+license = "MIT"
+
+[tool.poetry.scripts]
+subgrab = 'subgrab.cli:main'
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+requests = "^2.23.0"
+bs4 = "^0.0.1"
+lxml = "^4.5.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.1"
+black = "^19.10b0"
+flake8 = "^3.7.9"
+pre-commit = "^2.2.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''

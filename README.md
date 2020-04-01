@@ -1,9 +1,11 @@
 # SubGrab - Command-line Subtitles Downloader:
+
 [![Downloads](http://pepy.tech/badge/subgrab)](http://pepy.tech/count/subgrab)
 
 A utility which provides an ease for automating media i.e., Movies, TV-Series subtitle scraping from multiple providers.
 
 # Index:
+
 * [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#installation)
 * [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#requirements)
 * [Supported Sites](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#providers-supported)
@@ -16,34 +18,24 @@ A utility which provides an ease for automating media i.e., Movies, TV-Series su
 
 # Status/Version:
 
-- Beta Release.
-- Current Version: 0.17
+* Current Version: 1.0.0
 
 # Installation:
-
-* Via Repo:
-```
-git clone https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber
-cd Subscene-Subtitle-Grabber
-python setup.py install
-```
-
-* Via PIP:
 
 `pip install subgrab`
 
 # Providers Supported:
+
 Following sites can be used for subtitle downloading:
 
 <center>
 
-| Supported Sites |
-| :--------------: |
-| SUBSCENE ```(-m)``` |
-| ALLSUBDB ```(default for directories)``` |
+|           Supported Sites            |
+| :----------------------------------: |
+|           SUBSCENE `(-m)`            |
+| ALLSUBDB `(default for directories)` |
 
 </center>
-
 
 # Usage:
 
@@ -68,7 +60,6 @@ Options:
                         Number of subtitles to be downloaded.
 
   -l LANG, --lang LANG  Change language.
-
 ```
 
 # Examples:
@@ -93,53 +84,49 @@ subgrab -m The Intern 2015 -c 3 -s  # Download 3 subtitles for the movie.
 
 # Note:
 
-- (For Windows) To use it from the context menu, paste subtitle.bat file in "shell:sendto" (By typing this in RUN).
-Taken from Manojmj subtitles script.
+* (For Windows) To use it from the context menu, paste subtitle.bat file in "shell:sendto" (By typing this in RUN).
+  Taken from Manojmj subtitles script.
 
 # Features:
 
-- Two Mode (CLI and Silent inside individual media downloading [-m]) - CLI mode is executed when the title (provided i.e. media name) is not recognized by the site. Mostly when year is not provied (when two or more media names collide). Silent mode is usually executed when year is provided in the argument. Optional, you can also specify silent mode argument - which forces to download subtitles without title selection prompt. The media argument (-m) followed by the silent mode (-s) argument forces silent mode.
+* Two Mode (CLI and Silent inside individual media downloading [-m]) - CLI mode is executed when the title (provided i.e. media name) is not recognized by the site. Mostly when year is not provied (when two or more media names collide). Silent mode is usually executed when year is provided in the argument. Optional, you can also specify silent mode argument - which forces to download subtitles without title selection prompt. The media argument (-m) followed by the silent mode (-s) argument forces silent mode.
 
-- Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in v0.12).
+* Subtitles count argument added which allows you to download multiple subtitles for an individual media. This is useful when the exact match is not found and you can download multiple srt files and check them if they are in sync with the media file (integrated in v0.12).
 
-- Added multiple languages support (v0.12).
+* Added multiple languages support (v0.12).
 
-- Allows you to download subtitles for movies by specifying movie name and year (optional).
+* Allows you to download subtitles for movies by specifying movie name and year (optional).
 
-- Allows you to download subtitles for media files in a specified directory.
+* Allows you to download subtitles for media files in a specified directory.
 
-- Cross-platform (Tested on Linux and Windows).
+* Cross-platform (Tested on Linux and Windows).
 
-- Logs generation on script execution (v0.15)
+* Logs generation on script execution (v0.15)
 
-- Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory.
+* Added Support for the SubDb (v0.16), now first preference for downloading subtitles is SubDB in downloading subtitles from a directory.
 
-# Requirements:
-
-- Python 3
-- Requests
-- BeautifulSoup
+* Initial release (v1.0.0)
 
 # TODO:
 
-- [x] Adding support for more languages.
-- [x] Adding flags.
-- [X] Support for AllSubDB .
-- [ ] Support for OpenSubtitles, YifySubtitles.
-- [ ] Auto-Sync subtitle naming with the media file when downloaded from subscene.
-- [ ] A GUI box which creates a dialogue box (consisting of tick and cross), which waits for the user to check if the subtitle downloaded is synchronized with media file or not - if clicked cross, downloads another subtitle (Process gets repeated unless, correctly synchronized).
-- [ ] Watch-folder feature (runs as a service). # Useful for movies automatically downloaded on servers.
-- [ ] Argument handling (Replace Argsparse with Click).
-- [ ] Using Tabulate for monitoring directory subtitle downloading progress. Three Columns [#, Movie_Folder, Status].
-- [ ] Better Logging.
-- [ ] Download subtitles for movies contained in a directory of X year.
-- [X] Adding silent mode for downloading subtitles.
-- [X] Adding CLI mode for manually downloading subtitles.
-- [X] Implement Logging.
-- [X] Implementation for seasons episodes.
-- [X] Different search algorithms implementation for precise results.
-- [X] Improving CLI Mode by displaying the menu according to the site.
-- [ ] Multiple subtitle language support also associated with the count variable.
+* [x] Adding support for more languages.
+* [x] Adding flags.
+* [x] Support for AllSubDB .
+* [ ] Support for OpenSubtitles, YifySubtitles.
+* [ ] Auto-Sync subtitle naming with the media file when downloaded from subscene.
+* [ ] A GUI box which creates a dialogue box (consisting of tick and cross), which waits for the user to check if the subtitle downloaded is synchronized with media file or not - if clicked cross, downloads another subtitle (Process gets repeated unless, correctly synchronized).
+* [ ] Watch-folder feature (runs as a service). # Useful for movies automatically downloaded on servers.
+* [ ] Argument handling (Replace Argsparse with Click).
+* [ ] Using Tabulate for monitoring directory subtitle downloading progress. Three Columns [#, Movie_Folder, Status].
+* [ ] Better Logging.
+* [ ] Download subtitles for movies contained in a directory of X year.
+* [x] Adding silent mode for downloading subtitles.
+* [x] Adding CLI mode for manually downloading subtitles.
+* [x] Implement Logging.
+* [x] Implementation for seasons episodes.
+* [x] Different search algorithms implementation for precise results.
+* [x] Improving CLI Mode by displaying the menu according to the site.
+* [ ] Multiple subtitle language support also associated with the count variable.
 
 ```
 For example:
@@ -147,9 +134,9 @@ For example:
 should download 3 subtitles for each language specified
 ```
 
-- [ ] An option to print list of movies which has subtitles.
-- [ ] Creating options in context menu.
-- [ ] Display menu which enables to download subtitles for selected directories. (Supporting ranges)
+* [ ] An option to print list of movies which has subtitles.
+* [ ] Creating options in context menu.
+* [ ] Display menu which enables to download subtitles for selected directories. (Supporting ranges)
 
 ```
 For Examples:

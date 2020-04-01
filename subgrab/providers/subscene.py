@@ -1,9 +1,11 @@
-import requests
-import re
-import bs4
-import zipfile
-import os
 import logging
+import os
+import re
+import zipfile
+
+import bs4
+import requests
+
 
 logger = logging.getLogger("subscene.py")
 SUB_QUERY = "https://subscene.com/subtitles/searchbytitle"
@@ -96,7 +98,9 @@ def silent_mode(title_name, category, name=""):
 
     # Searches first in Popular category, if found, returns the title name
     obt_link = html_navigator(sort_by="Popular")
-    if not obt_link:  # If not found in the popular category, searches in other category
+    if (
+        not obt_link
+    ):  # If not found in the popular category, searches in other category
         return html_navigator(sort_by="other_than_popular")
     return obt_link
 
@@ -108,7 +112,9 @@ def cli_mode(titles_name, category):
     :param titles_name: title names obtained from get_title function.
     """
     media_titles = []  # Contains key names of titles_and_links dictionary.
-    titles_and_links = {}  # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
+    titles_and_links = (
+        {}
+    )  # --> "Doctor Strange" --> "https://subscene.com/.../1345632"
     for i, x in enumerate(category.find_all_next("div", {"class": "title"})):
         title_text = x.text.encode("ascii", "ignore").decode("utf-8").strip()
         titles_and_links[title_text] = x.a.get("href")
@@ -163,7 +169,9 @@ def sel_title(name):
                 soup.find("div", {"class": "search-result"}).h2.string
                 == "No results found"
             ):
-                print("Sorry, the subtitles for this media file aren't available.")
+                print(
+                    "Sorry, the subtitles for this media file aren't available."
+                )
                 return
 
     except Exception as e:
@@ -182,7 +190,9 @@ def sel_title(name):
             return cli_mode(titles, category=popular)
         else:
             logger.info("Running in SILENT mode.")
-            return silent_mode(titles, category=popular, name=name.replace(".", " "))
+            return silent_mode(
+                titles, category=popular, name=name.replace(".", " ")
+            )
 
 
 # Select Subtitles
@@ -244,13 +254,17 @@ def dl_sub(page):
     div = soup.find("div", {"class": "download"})
     down_link = "https://subscene.com" + div.find("a").get("href")
     r = requests.get(down_link, stream=True)
-    for found_sub in re.findall("filename=(.+)", r.headers["content-disposition"]):
+    for found_sub in re.findall(
+        "filename=(.+)", r.headers["content-disposition"]
+    ):
         with open(found_sub.replace("-", " "), "wb") as f:
             for chunk in r.iter_content(chunk_size=150):
                 if chunk:
                     f.write(chunk)
         zip_extractor(found_sub.replace("-", " "))
     print(
-        "Subtitle ({}) - Downloaded\n".format(found_sub.replace("-", " ").capitalize())
+        "Subtitle ({}) - Downloaded\n".format(
+            found_sub.replace("-", " ").capitalize()
+        )
     )
     # print("--- download_sub took %s seconds ---" % (time.time() - start_time))
