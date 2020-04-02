@@ -6,4 +6,3 @@ cls
 IF %1=="" GOTO completed
 	subgrab -m %~n1 -c 2
 :completed
-    exit
