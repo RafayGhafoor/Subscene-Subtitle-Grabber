@@ -1,10 +1,17 @@
+[[tool.poetry.source]]
+name = "subgrab"
+url = "https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber"
+
 [tool.poetry]
 name = "subgrab"
-version = "1.0.2"
-description = "Automate subtitles fetching"
+version = "1.0.3"
+description = "Automated subtitles fetching"
+readme = "README.md"
+keywords = ["automation", "subtitles", "python", "pyproject.toml", "subscene", "subgrab"]
+long_description_content_type='text/markdown'
 authors = ["Rafay Ghafoor <rafayghafoor@protonmail.com>"]
-url = "https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber"
 license = "MIT"
+
 
 [tool.poetry.scripts]
 subgrab = 'subgrab.cli:main'
