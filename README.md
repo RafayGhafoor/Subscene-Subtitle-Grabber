@@ -7,6 +7,7 @@ A utility which provides an ease for automating media i.e., Movies, TV-Series su
 # Index:
 
 * [Installation](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#installation)
+* [Preview](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#preview)
 * [Requirements](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#requirements)
 * [Supported Sites](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#providers-supported)
 * [Preview](https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber#preview)
@@ -23,6 +24,10 @@ A utility which provides an ease for automating media i.e., Movies, TV-Series su
 # Installation:
 
 `pip install subgrab`
+
+# Preview:
+
+[![asciicast](https://asciinema.org/a/316877.svg)](https://asciinema.org/a/316877)
 
 # Providers Supported:
 
