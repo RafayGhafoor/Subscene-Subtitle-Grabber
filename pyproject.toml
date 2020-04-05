@@ -3,6 +3,7 @@ name = "subgrab"
 version = "1.0.2"
 description = "Automate subtitles fetching"
 authors = ["Rafay Ghafoor <rafayghafoor@protonmail.com>"]
+url = "https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber"
 license = "MIT"
 
 [tool.poetry.scripts]
