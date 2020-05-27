@@ -4,70 +4,35 @@ import logging.config
 import os
 import sys
 
+import pkg_resources
+
+from config import init_logger
 from subgrab.providers import subscene
 from subgrab.utils import directory
 
 
-if os.sep == "\\":  # Windows OS
-    log_home = os.path.expanduser(
-        os.path.join(os.path.join("~", "AppData"), "Local")
-    )
-else:  # Other than Windows
-    log_home = os.getenv(
-        "XDG_DATA_HOME",
-        os.path.expanduser(os.path.join(os.path.join("~", ".local"), "share")),
-    )
-log_directory = os.path.join(log_home, "Subgrab")
-
-if not os.path.exists(log_directory):
-    os.mkdir(log_directory)
-
-logfile_name = os.path.join(log_directory, "subgrab.log")
-DEFAULT_LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "standard": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-        },
-    },
-    "handlers": {
-        "file": {
-            "level": "DEBUG",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "formatter": "standard",
-            "filename": logfile_name,
-        },
-    },
-    "loggers": {
-        "SubGrab": {"handlers": ["file"], "level": "DEBUG", "propagate": True},
-        "directory": {
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-        "subscene": {
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-    },
-}
-logging.config.dictConfig(DEFAULT_LOGGING)
-logger = logging.getLogger("SubGrab")
+def get_version():
+    return pkg_resources.get_distribution("subgrab").version
 
 
 def main():
+
+    logger = init_logger()
+
     parser = argparse.ArgumentParser()
+
     parser.add_argument(
         "-d", "--dir", default=".", help="Specify directory to work in."
     )
+
     parser.add_argument(
         "-m", "--media-name", nargs="+", help="Provide movie name."
     )
+
     parser.add_argument(
         "-s", "--silent", action="store_true", help="Silent mode."
     )
+
     parser.add_argument(
         "-c",
         "--count",
@@ -75,10 +40,21 @@ def main():
         default=1,
         help="Number of subtitles to be downloaded.",
     )
+
     parser.add_argument("-l", "--lang", default="EN", help="Change language.")
+
+    parser.add_argument(
+        "-v", "--version", action="store_true", help="Show version."
+    )
+
     args = parser.parse_args()
+
     logger.debug("Input with flags: {}".format(sys.argv))
+
     logger.info("Initialized SubGrab script")
+
+    if args.version:
+        sys.exit(get_version())
 
     if args.silent:
         # If mode is silent
