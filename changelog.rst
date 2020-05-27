@@ -4,13 +4,16 @@ Sub-Grab Changelog
 :Info: Changelog for sub-grab project.
 :Author: Rafay Ghafoor <rafayghafoor@protonmail.com>
 :Copyright: © 2020, Rafay Ghafoor.
-:Date: 2020-04-05
-:Version: 1.0.3
+:Date: 2020-05-27
+:Version: 1.0.4
 
 .. index:: CHANGELOG
 
 Version History
 ===============
+1.0.4 / 2020-05-27
+    * Improved subtitles language search context
+
 1.0.3 / 2020-04-05
     * Added preview
     * Added ReadMe

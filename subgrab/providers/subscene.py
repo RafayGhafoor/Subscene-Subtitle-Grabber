@@ -15,7 +15,7 @@ LANGUAGE = {
     "DA": "Danish",
     "DU": "Dutch",
     "EN": "English",
-    "FA": "Farsi_persian",
+    "FA": "farsi_persian",
     "IN": "Indonesian",
     "IT": "Italian",
     "MA": "Malay",
@@ -213,7 +213,7 @@ def sel_sub(page, sub_count=1, name=""):
             current_sub < sub_count
             and "trailer" not in link.text.lower()
             and link.get("href") not in sub_list
-            and DEFAULT_LANG in link.text
+            and DEFAULT_LANG.lower() in link.get("href")
         ):
             # if movie = Doctor.Strange.2016, this first condition is not
             # going to be executed because the length of the list will be 0

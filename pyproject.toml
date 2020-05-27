@@ -4,7 +4,7 @@ url = "https://github.com/RafayGhafoor/Subscene-Subtitle-Grabber"
 
 [tool.poetry]
 name = "subgrab"
-version = "1.0.3"
+version = "1.0.4"
 description = "Automated subtitles fetching"
 readme = "README.md"
 keywords = ["automation", "subtitles", "python", "pyproject.toml", "subscene", "subgrab"]
