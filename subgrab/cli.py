@@ -117,16 +117,19 @@ def main():
         # Searches for the specified movie.
         args.media_name = " ".join(args.media_name)
         logger.info("Searching For: {}".format(args.media_name))
-        sub_link = subscene.sel_title(name=args.media_name.replace(" ", "."))
-        logger.info(
-            "Subtitle Link for {} : {}".format(args.media_name, sub_link)
-        )
-        if sub_link:
-            for i in subscene.sel_sub(
-                page=sub_link, sub_count=args.count, name=args.media_name
-            ):
-                logger.debug("Downloading Subtitle: {}\n".format(i))
-                subscene.dl_sub(i)
+        sub_links = subscene.sel_title(name=args.media_name.replace(" ", "."))
+        if sub_links:
+            for sub_link in sub_links:
+                logger.info(
+                    "Subtitle Link for {} : {}".format(args.media_name, sub_link)
+                )
+                if sub_link:
+                    for i in subscene.sel_sub(
+                        page=sub_link, sub_count=args.count, name=args.media_name
+                    ):
+                        logger.debug("Downloading Subtitle: {}\n".format(i))
+                        names = subscene.dl_sub(i)
+                    time.sleep(1)
 
     else:
         print("Incorrect Arguments Specified.")

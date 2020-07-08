@@ -120,16 +120,29 @@ def cli_mode(titles_name, category):
         titles_and_links[title_text] = x.a.get("href")
         print("({}): {}".format(i, title_text))
         media_titles.append(title_text)
-
     try:
-        qs = int(input("\nPlease Enter Movie Number: "))
+        qs = (input("\nPlease Enter Movie Number(s): "))
+        qs = qs.split(",")
+        numbers = []
+        subtitle_urls = []
+        for innerq in qs:
+            if len(innerq.split("-"))==2:
+                first_number = int(innerq.split("-")[0].strip())
+                second_number = int(innerq.split("-")[1].strip())
+                numbers = numbers + list(range(first_number,second_number+1))
+            else:
+                numbers.append(int(innerq.strip()))
+        numbers = sorted(set(numbers))
+        for number in numbers:
+            subtitle_urls.append(
+                "https://subscene.com"
+                + titles_and_links[media_titles[number]]
+                + "/"
+                + DEFAULT_LANG
+            )
         return (
-            "https://subscene.com"
-            + titles_and_links[media_titles[qs]]
-            + "/"
-            + DEFAULT_LANG
+            subtitle_urls
         )
-
     except Exception as e:
         logger.warning("Movie Skipped - {}".format(e))
         # If pressed Enter, movie is skipped.
