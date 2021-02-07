@@ -1,28 +1,40 @@
 import argparse
 import logging
-import logging.config
+import logging.config  # not needed I guess, import logging do it
 import os
 import sys
+import json
+from pathlib import Path
 
 from subgrab.providers import subscene
+from subgrab.providers import subdb
+from subgrab.providers import addic7ed
 from subgrab.utils import directory
+from subgrab.utils.languages import get_languages
+from subgrab.utils.scraping import scrape_page
 
 
-if os.sep == "\\":  # Windows OS
-    log_home = os.path.expanduser(
-        os.path.join(os.path.join("~", "AppData"), "Local")
-    )
-else:  # Other than Windows
-    log_home = os.getenv(
-        "XDG_DATA_HOME",
-        os.path.expanduser(os.path.join(os.path.join("~", ".local"), "share")),
-    )
-log_directory = os.path.join(log_home, "Subgrab")
+PROVIDERS = ['subscene',
+             'subdb',
+             'addic7ed']
 
-if not os.path.exists(log_directory):
-    os.mkdir(log_directory)
+# LOG CONFIGURATION
+if os.sep == "\\":
+    # Windows OS
+    log_home = Path.home().joinpath("AppData", "Local")
+else:
+    # Other than Windows
+    if not os.getenv("XDG_DATA_HOME"):
+        log_home = os.getenv("XDG_DATA_HOME",
+                             default=Path.home().joinpath(".local", "share"))
 
-logfile_name = os.path.join(log_directory, "subgrab.log")
+log_directory = log_home.joinpath("Subgrab")
+
+if not log_directory.exists():
+    log_directory.mkdir()
+
+logfile_name = log_directory.joinpath("subgrab.log")
+
 DEFAULT_LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -40,59 +52,111 @@ DEFAULT_LOGGING = {
         },
     },
     "loggers": {
-        "SubGrab": {"handlers": ["file"], "level": "DEBUG", "propagate": True},
+        "SubGrab": {"handlers": ["file"], "level": "INFO", "propagate": True},
         "directory": {
             "handlers": ["file"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
         "subscene": {
             "handlers": ["file"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
     },
 }
+
 logging.config.dictConfig(DEFAULT_LOGGING)
 logger = logging.getLogger("SubGrab")
 
-
+# MAIN FUNCTION
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d", "--dir", default=".", help="Specify directory to work in."
-    )
-    parser.add_argument(
-        "-m", "--media-name", nargs="+", help="Provide movie name."
-    )
-    parser.add_argument(
-        "-s", "--silent", action="store_true", help="Silent mode."
-    )
-    parser.add_argument(
-        "-c",
-        "--count",
-        type=int,
-        default=1,
-        help="Number of subtitles to be downloaded.",
-    )
-    parser.add_argument("-l", "--lang", default="EN", help="Change language.")
-    args = parser.parse_args()
-    logger.debug("Input with flags: {}".format(sys.argv))
-    logger.info("Initialized SubGrab script")
 
+    # CLI DEFINITION
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--dir",
+                        default=".",
+                        help="Specify directory to work in.")
+    parser.add_argument("-m", "--media-name",
+                        nargs="*",
+                        metavar='media_name',
+                        help="Provide movie name.")
+    parser.add_argument("-p", "--provider",
+                        choices=PROVIDERS,
+                        default='subscene')
+    parser.add_argument("-s", "--silent",
+                        action="store_true",
+                        help="Silent mode.")
+    parser.add_argument("-c", "--count",
+                        type=int,
+                        default=1,
+                        help="Number of subtitles to be downloaded.")
+    parser.add_argument("-l", "--lang",
+                        default="EN",
+                        help="Change language.")
+    parser.add_argument("-deb", "--debug",
+                        type=str,
+                        default="info",
+                        help="Set log level for logger: debug|info|warning|error.")
+
+    args = parser.parse_args()
+
+    logger.debug(f"Input with flags: {sys.argv}")
+    logger.info("SubGrab script initialized")
+
+    # LANGUAGE HANDLING
+    PROVIDER = args.provider
+    LANGUAGES = get_languages(PROVIDER)
+    global LANGUAGE
+
+    try:
+
+        LANGUAGE = LANGUAGES[args.lang.lower()]
+        print(f"LANGUAGE: {LANGUAGE}")
+        logger.info(f"Language: {LANGUAGE['name']}")
+
+    except KeyError:
+
+        logger.error(f"Language {args.lang} not found. Either it's not supported by {args.provider}, or it's missing in subgrab language dictionary")
+
+    # CLI ARGUMENT PROCESSING
     if args.silent:
         # If mode is silent
-        logger.debug("Executing Silent Mode")
+        logger.debug("Execute in Silent Mode")
         subscene.MODE = "silent"
 
-    if args.lang:
-        # Select language - Enter first two letters of the language
-        if len(args.lang) == 2:
-            subscene.DEFAULT_LANG = subscene.LANGUAGE[args.lang.upper()]
-            logger.info("Set Language: {}".format(args.lang))
-        else:
-            sys.exit("Invalid language specified.")
+    #if args.debug:
+    #    cli.MODE = args.debug
 
+    # (1) Process entered titles first, if entered.
+    if args.media_name:
+
+        soup = scrape_page(url=subscene.SUB_QUERY,
+                           parameter=args.media_name)
+
+        titles_dict = subscene.search_titles(soup)
+        title_url = subscene.select_title(titles_dict, LANGUAGE)
+
+        soup = scrape_page(url=title_url)
+
+        entries_dict = subscene.get_entries(soup)
+        print(entries_dict)
+
+        # safe to json (to not have to crawl again)
+        target = Path('.').joinpath('subtitles.json')
+        if not target.exists():
+            with open(target, 'w+') as f:
+                json.dump(dict(entries_dict), f)
+
+        entries_urls = subscene.get_dl_pages(entries_dict, args.count)
+
+        for url in entries_urls:
+            subscene.dl_sub(url)
+        #subscene.get_data(titles_dict)
+
+
+    """
     if args.dir != ".":
         # Searches for movies in specified directory.
         logger.debug("Running in directory: {}".format(args.dir))
@@ -112,7 +176,6 @@ def main():
         directory.create_folder()
         directory.get_media_files()
         directory.dir_dl(sub_count=args.count)
-
     elif args.media_name:
         # Searches for the specified movie.
         args.media_name = " ".join(args.media_name)
@@ -130,6 +193,7 @@ def main():
 
     else:
         print("Incorrect Arguments Specified.")
+    """
 
 
 if __name__ == "__main__":

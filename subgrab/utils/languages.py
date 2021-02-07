@@ -1,13 +1,17 @@
+import logging
 import json
-
-with open('languages.json', 'r') as f:
+from pathlib import  Path
+with open(Path(Path(__file__).parent) / 'languages.json', 'r') as f:
     data = f.read()
 
 LANG_ISO = json.loads(data)
-LANG_DEFAULT = "en"
+
+logger = logging.getLogger("languages.py")
 
 def get_languages(provider):
+
     languages = {}
+
     for k,v in LANG_ISO.items():
         try:
             if v[provider]['accepted'] == True:
@@ -17,6 +21,6 @@ def get_languages(provider):
             # pass silently, if key not exists
             pass
         else:
-            print(f"Language {v['name']} not in dictionary\nor not supported by {provider}")
+            logging.debug(f"Language {v['name']} not in dictionary\nor not supported by {provider}")
     return languages
 

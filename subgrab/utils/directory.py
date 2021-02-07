@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+from pathlib import Path
 from typing import Dict, List
 
 from subgrab.providers import subdb, subscene
@@ -8,7 +9,7 @@ from subgrab.providers import subdb, subscene
 
 logger = logging.getLogger("directory.py")
 EXT = [".mp4", ".mkv", ".avi", ".flv"]
-MOVIES_DIR: Dict[str, List] = {}  # Contains Movies Directories (keys) and the
+MOVIES_DIR : Dict[str, List] = {}  # Contains Movies Directories (keys) and the
 # files inside them (values = [list])
 REMOVALS = []  # Which already contains subtitles
 
@@ -51,7 +52,9 @@ def get_media_files():
     """
     for folders, _, files in os.walk("."):
         for i in files:
+            logger.debug(f"'folders' unmodified: {folders}")
             folders = folders.replace("." + os.sep, "")
+            logger.debug(f"'folders' modified: {folders}")
             if i.endswith(".srt"):
                 REMOVALS.append(folders)
             for extension in EXT:
