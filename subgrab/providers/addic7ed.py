@@ -23,7 +23,7 @@ def get_data(bs4elementTag):
         - URL
         - debug value
 
-    remember     A bs4.element.ResultSet which will be returned by select method
+    remember: A bs4.element.ResultSet which will be returned by select method
               are list objects. Get the element.Tag by using the index [0].
     """
     sub_title_links = {}
@@ -32,10 +32,17 @@ def get_data(bs4elementTag):
 
     title = bs4elementTag.text.strip()
     logger.debug(f"TITLE: {title}")
-    url = urljoin('https://addic7ed.com', bs4elementTag['href'])
+    # replacing the last part by language No does the job
+    url = urljoin('https://addic7ed.com',
+                  re.sub(r'[^/]+$', f'{LANG}', bs4elementTag['href']))
     logger.debug(f"URL: {url}")
+    # note: debug value us used as id in following url,
+    # but this could not directly acessed (without the
+    # correct right referer, cookies etc.):
+    # https://www.addic7ed.com/original/157750/1
+    #                                  |--ID--| No. 0 ... z
     debug = bs4elementTag['debug']
-    logger.debug(f"DEBUG     {debug}")
+    logger.debug(f"DEBUG: {debug}")
 
     sub_title_links = {'title': title,
                        'url': url,

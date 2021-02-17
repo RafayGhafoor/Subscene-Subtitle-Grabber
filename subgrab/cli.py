@@ -132,15 +132,15 @@ def main():
     # (1) Process entered titles first, if entered.
     if args.media_name:
 
-        soup = scrape_page(url=subscene.SUB_QUERY,
+        soup = scrape_page(url=PROVIDER.SUB_QUERY,
                            parameter=args.media_name)
 
-        titles_dict = subscene.search_titles(soup)
-        title_url = subscene.select_title(titles_dict, LANGUAGE)
+        titles_dict = PROVIDER.search_titles(soup)
+        title_url = PROVIDER.select_title(titles_dict, LANGUAGE)
 
         soup = scrape_page(url=title_url)
 
-        entries_dict = subscene.get_entries(soup)
+        entries_dict = PROVIDER.get_entries(soup)
         print(entries_dict)
 
         # safe to json (to not have to crawl again)
@@ -149,11 +149,11 @@ def main():
             with open(target, 'w+') as f:
                 json.dump(dict(entries_dict), f)
 
-        entries_urls = subscene.get_dl_pages(entries_dict, args.count)
+        entries_urls = PROVIDER.get_dl_pages(entries_dict, args.count)
 
         for url in entries_urls:
-            subscene.dl_sub(url)
-        #subscene.get_data(titles_dict)
+            PROVIDER.dl_sub(url)
+        #PROVIDER.get_data(titles_dict)
 
 
     """
