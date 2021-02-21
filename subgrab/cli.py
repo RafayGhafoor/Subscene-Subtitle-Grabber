@@ -14,9 +14,9 @@ from subgrab.utils.languages import get_languages
 from subgrab.utils.scraping import scrape_page
 
 
-PROVIDERS = ['subscene',
-             'subdb',
-             'addic7ed']
+PROVIDERS = {'subscene': subscene,
+             'subdb': subdb,
+             'addic7ed': addic7ed}
 
 # LOG CONFIGURATION
 if os.sep == "\\":
@@ -83,7 +83,7 @@ def main():
                         metavar='media_name',
                         help="Provide movie name.")
     parser.add_argument("-p", "--provider",
-                        choices=PROVIDERS,
+                        choices=PROVIDERS.keys(), # dict keys object, maby must be converteed to a list object
                         default='subscene')
     parser.add_argument("-s", "--silent",
                         action="store_true",
@@ -106,7 +106,7 @@ def main():
     logger.info("SubGrab script initialized")
 
     # LANGUAGE HANDLING
-    PROVIDER = args.provider
+    PROVIDER = args.provider.lower()
     LANGUAGES = get_languages(PROVIDER)
     global LANGUAGE
 
@@ -132,15 +132,15 @@ def main():
     # (1) Process entered titles first, if entered.
     if args.media_name:
 
-        soup = scrape_page(url=PROVIDER.SUB_QUERY,
+        soup = scrape_page(url=PROVIDERS.get(PROVIDER).SUB_QUERY,
                            parameter=args.media_name)
 
-        titles_dict = PROVIDER.search_titles(soup)
-        title_url = PROVIDER.select_title(titles_dict, LANGUAGE)
+        titles_dict = PROVIDERS.get(PROVIDER).search_titles(soup)
+        title_url = PROVIDERS.get(PROVIDER).select_title(titles_dict, LANGUAGE)
 
         soup = scrape_page(url=title_url)
 
-        entries_dict = PROVIDER.get_entries(soup)
+        entries_dict = PROVIDERS.get(PROVIDER).get_entries(soup)
         print(entries_dict)
 
         # safe to json (to not have to crawl again)
@@ -149,11 +149,11 @@ def main():
             with open(target, 'w+') as f:
                 json.dump(dict(entries_dict), f)
 
-        entries_urls = PROVIDER.get_dl_pages(entries_dict, args.count)
+        entries_urls = PROVIDERS.get(PROVIDER).get_dl_pages(entries_dict, args.count)
 
         for url in entries_urls:
-            PROVIDER.dl_sub(url)
-        #PROVIDER.get_data(titles_dict)
+            PROVIDERS.get(PROVIDER).dl_sub(url)
+        #PROVIDERS.get(PROVIDER).get_data(titles_dict)
 
 
     """

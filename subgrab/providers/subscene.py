@@ -158,7 +158,7 @@ def get_data(bs4elementTag):
     count = bs4elementTag.select('div.count')[0].text.strip()
     logger.debug(f"COUNT: {count}")
 
-    sub_title_links = {'title': title, 'url': url, 'debug': count}
+    sub_title_links = {'title': title, 'url': url, 'count': count}
 
     return sub_title_links
 
