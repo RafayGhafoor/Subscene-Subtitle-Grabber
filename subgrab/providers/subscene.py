@@ -10,12 +10,52 @@ from urllib.request import urljoin
 from subgrab.utils.scraping import scrape_page
 from subgrab.utils.scraping import zip_extractor
 
+# DEBUGGINg with iPython
+from IPython import embed
+
 logger = logging.getLogger("subscene.py")
 
 SUB_QUERY = "https://subscene.com/subtitles/searchbytitle"
 MODE = "prompt"
 
-def search_titles(soup, category='popular'):
+def search(parameter='', lang='', count=''):
+    """
+    Show search results and provide selection of one entry.
+    """
+    soup = scrape_page(url=SUB_QUERY,
+                       parameter=parameter)
+
+    titles_dict = search_titles(soup)
+
+    if not titles_dict:
+
+        print("No entry found.")
+
+    else:
+
+        title_url = select_title(titles_dict, lang)
+
+        soup = scrape_page(url=title_url)
+
+        entries_dict = get_entries(soup)
+        print(entries_dict)
+
+        # safe to json (to not have to crawl again)
+        target = Path('.').joinpath('subtitles.json')
+        if not target.exists():
+            with open(target, 'w+') as f:
+                json.dump(dict(entries_dict), f)
+
+        entries_urls = PROVIDER.get_dl_pages(entries_dict, count)
+
+        embed()
+
+        for url in entries_urls:
+
+            dl_sub(url)
+
+
+def search_titles(soup, category='all'):
     """
     Returns a dict with numbers starting from 0 as keys and a dictionary
     as value, where the keys are:
@@ -51,6 +91,7 @@ def search_titles(soup, category='popular'):
             selectors = soup.select('h2 ~ ul > li')
             for selector in selectors:
                 titles_dict[i] = get_data(selector)
+                logger.debug(f"Dict entry with key={i} successlly written.")
                 i += 1
 
         else:
@@ -104,7 +145,7 @@ def select_title(titles_dict, LANGUAGE, col_width=int(60) ):
         if width < col_width:
 
             fill = col_width - width
-            print(f"({i}): {data['title']}{' '*fill}| {data['count']}")
+            print(f"({i}): {data['title']}{' '*fill}| {data['count']} (all languages)")
 
         else:
 
@@ -151,11 +192,11 @@ def get_data(bs4elementTag):
 
     logger.debug(f"bs4.element.Tag: {bs4elementTag}")
 
-    title = bs4elementTag.select('a')[0].text
+    title = bs4elementTag.select_one('a').text
     logger.debug(f"TITLE: {title}")
-    url = urljoin('https://subscene.com', bs4elementTag.select('a')[0]['href'])
+    url = urljoin('https://subscene.com', bs4elementTag.select_one('a')['href'])
     logger.debug(f"URL: {url}")
-    count = bs4elementTag.select('div.count')[0].text.strip()
+    count = bs4elementTag.select_one('.count').text.strip()
     logger.debug(f"COUNT: {count}")
 
     sub_title_links = {'title': title, 'url': url, 'count': count}
@@ -185,21 +226,34 @@ def get_entries(soup):
 
         else:
 
-            filename = r.select_one('span:nth-child(2)').text.strip()
-            url = urljoin('https://subscene.com', r.select_one('a')['href'])
-            episode = re.search(r'S\d+E\d+', filename).group()
-            #info = r.select_one('div').text.strip()
-            #duration = re.search(r'(\d+:\d+)', info).group()
-            #source = re.search(r'From\s([a-zA-Z0-7.]+)', info).group(1)
-            print(f"filename: {filename}")
-            print(f"URL:      {url}")
-            print(f"episode:  {episode}")
-            #print(f"duration: {duration}")
-            #print(f"source:   {source}\n")
+            try:
 
-            subs[episode].append(url)
+                filename = r.select_one('span:nth-child(2)').text.strip()
+                url = urljoin('https://subscene.com', r.select_one('a')['href'])
+                episode = re.search(r'S\d+E\d+', filename).group()
+                #info = r.select_one('div').text.strip()
+                #duration = re.search(r'(\d+:\d+)', info).group()
+                #source = re.search(r'From\s([a-zA-Z0-7.]+)', info).group(1)
+                print(f"filename: {filename}")
+                print(f"URL:      {url}")
+                print(f"episode:  {episode}")
+                #print(f"duration: {duration}")
+                #print(f"source:   {source}\n")
 
-    return subs
+                subs[episode].append(url)
+
+            except AttributeError:
+
+                # no subtitle for given language: pass silently
+                pass
+
+    if not subs:
+
+        logger.info("No subtitle available for given language.")
+
+    else:
+
+        return subs
 
 
 def get_dl_pages(entries_dict, max_files):

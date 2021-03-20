@@ -19,8 +19,11 @@ def scrape_page(url, parameter=""):
     }
 
     if parameter:
+
         req = requests.get(url, params={"query": parameter}, headers=HEADERS)
+
     else:
+
         req = requests.get(url, headers=HEADERS)
 
     if req.status_code != 200:
@@ -28,11 +31,14 @@ def scrape_page(url, parameter=""):
         logger.error("{} not retrieved.".format(req.url))
 
     try:
+
         req_html = bs4.BeautifulSoup(req.content, "lxml")
+        return req_html
+
     except Exception as e:
+
         logger.error(f"BeautifulSoup not created from {req.content}\n{e}")
 
-    return req_html
 
 
 def zip_extractor(name):

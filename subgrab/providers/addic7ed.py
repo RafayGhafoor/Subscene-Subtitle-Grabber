@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import zipfile
+import pickle
 
 import bs4
 import requests
@@ -9,48 +10,152 @@ from collections import defaultdict
 from urllib.request import urljoin
 from subgrab.utils.scraping import scrape_page
 from subgrab.utils.scraping import zip_extractor
+from subgrab.utils.titleparser import parse_title
+
+# DEBUGGINg with iPython
+from IPython import embed
 
 logger = logging.getLogger("addic7ed.py")
 
 SUB_QUERY = "https://www.addic7ed.com/search.php?search="
 #MODE = "prompt"
 
-def get_data(bs4elementTag):
+def search(parameter='', lang='', count=''):
     """
-    Get data about subtitles
-
-        - title
-        - URL
-        - debug value
-
-    remember: A bs4.element.ResultSet which will be returned by select method
-              are list objects. Get the element.Tag by using the index [0].
+    Show search results and provide selection of one entry.
     """
-    sub_title_links = {}
 
-    logger.debug(f"bs4.element.Tag: {bs4elementTag}")
+    soup = scrape_page(url=f"{SUB_QUERY}{' '.join(parameter)}")
+    titles = soup.select('table[class^=tabel] a')
+    title_dict = _get_data(titles, lang=lang)
+    selected = select_title(title_dict)
 
-    title = bs4elementTag.text.strip()
-    logger.debug(f"TITLE: {title}")
-    # replacing the last part by language No does the job
-    url = urljoin('https://addic7ed.com',
-                  re.sub(r'[^/]+$', f'{LANG}', bs4elementTag['href']))
-    logger.debug(f"URL: {url}")
-    # note: debug value us used as id in following url,
-    # but this could not directly acessed (without the
-    # correct right referer, cookies etc.):
-    # https://www.addic7ed.com/original/157750/1
-    #                                  |--ID--| No. 0 ... z
-    debug = bs4elementTag['debug']
-    logger.debug(f"DEBUG: {debug}")
+    for sel in selected:
+        sel_soup = dl_sub(sel['url'], '.buttonDownload')
 
-    sub_title_links = {'title': title,
-                       'url': url,
-                       'debug': debug}
+def _get_data(bs4elementTagList, **kwargs):
+    """
+    Get data about subtitles.
+    """
+    try:
+        lang = kwargs['lang']
+    except KeyError as e:
+        print(f"Language not in language dict.\n{e}")
 
-    print(sub_title_links)
-    return sub_title_links
 
+    def get_dl_urls(url):
+        """
+        Returns download urls.
+        """
+        pass
+
+    title_dict = defaultdict(list)
+
+    for bs4elementTag in bs4elementTagList:
+
+        # title
+        title = bs4elementTag.text.strip()
+        logger.debug(f"TITLE: {title}")
+
+        # url (language specific) by replacing last part by LANGUAGE
+        url_rel = bs4elementTag['href']
+
+        # series data: ser_title, ser_no, ep_no, ep_title, name
+        if url_rel.startswith('serie'):
+            url = urljoin('https://addic7ed.com',
+                      re.sub(r'[^/]+$', f'{lang}', url_rel))
+            ser_data = {**parse_title(title), 'serie': True}
+            # create new title for the defaultdict key (1 Series)
+            title = f"{ser_data['ser_title']} - Season {ser_data['ser_no']}"
+        else:
+            ser_data = {'serie': False}
+            url = urljoin('https://addic7ed.com', url_rel)
+
+        logger.debug(f"URL: {url}")
+
+        # set title as keys to fill defaultdict
+        title_dict[title].append({'url': url, 'title': title, **ser_data})
+
+    print(title_dict)
+    #_pickle('title_dict.pickle', title_dict)
+    return title_dict
+
+    #yeah
+
+def select_title(titles_dict, col_width=int(60) ):
+    """
+    Print available titles for selection and returns a list of
+    episodes/movie data (as dictionary).
+
+    series episodes and movies:
+
+    url: url to crawl subtitles from
+
+    series episodes:
+
+    title:     <ser_title> - Season <ser_no> (concatenated string)
+    ser_title: series title
+    ser_no:    series number (2-digits)
+    ep_title:  episode title
+    ep_no:     episode number (2-digits)
+    name:      suggested name for renaming (without extension):
+               <ser_title> - S<ser_no>E<ep_no> - <ep_title>
+    serie:     True (boolean) to identify as serie
+
+    movies:
+
+    title:     movie title
+    serie:     False (boolean) to identify as movie
+    """
+    # exchange keys to with selection number
+    select_dict = {}
+    i = 0
+
+    for title, data in titles_dict.items():
+
+        select_dict[i] = data
+        i += 1
+
+    # seperate selection list
+    print('\n')
+
+    for i, data in select_dict.items():
+
+        # pretty print results for selection
+        width = len(f"({i}): {data[0]['title']}")
+
+        # short entries: pretty print
+        if width < col_width:
+
+            fill = col_width - width
+            if data[0]['serie']:
+                type = 'Serie'
+            else:
+                type = 'Movie'
+
+            print(f"({i}): {data[0]['title']}{' '*fill}| {type}")
+
+        # long entries: print as short as possible
+        else:
+
+            print(f"({i}): {data[0]['title']} | {type}")
+
+    try:
+        qs = int(input("\nPlease Enter Movie Number: "))
+
+        if qs in select_dict.keys():
+
+            print(f"{select_dict[qs]}")
+            return select_dict[qs]
+
+        else:
+            logger.error("Movie number is not valid.")
+
+
+    except Exception as e:
+        logger.warning("Movie Skipped - {}".format(e))
+        # If pressed Enter, movie is skipped.
+        return
 
 def dl_sub(page, css_selector):
     """
@@ -81,19 +186,23 @@ def dl_sub(page, css_selector):
     for elem in elements:
         down_link = urljoin(SUB_QUERY, elem['href'])
         print(down_link)
-    r = requests.get(down_link, headers=headers, stream=True)
-    for found_sub in re.findall(
+        r = requests.get(down_link, headers=headers, stream=True)
+        for found_sub in re.findall(
         "filename=(.+)", r.headers["content-disposition"]
     ):
-        with open(found_sub.replace("-", " "), "wb") as f:
-            for chunk in r.iter_content(chunk_size=150):
-                if chunk:
-                    f.write(chunk)
+            with open(found_sub.replace("-", " "), "wb") as f:
+                for chunk in r.iter_content(chunk_size=150):
+                    if chunk:
+                        f.write(chunk)
         #zip_extractor(found_sub.replace("-", " "))
-    print(
-        "Subtitle ({}) - Downloaded\n".format(
+        print(
+            "Subtitle ({}) - Downloaded\n".format(
             found_sub.replace("-", " ").capitalize()
         )
     )
 
         # print("--- download_sub took %s seconds ---" % (time.time() - start_time))
+def _pickle(filename, object):
+    "Pickle object and save to current directory."
+    with open(filename, 'wb') as f:
+        pickle.dump(object, f)

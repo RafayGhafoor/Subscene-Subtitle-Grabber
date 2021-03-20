@@ -10,9 +10,11 @@ from subgrab.providers import subscene
 from subgrab.providers import subdb
 from subgrab.providers import addic7ed
 from subgrab.utils import directory
-from subgrab.utils.languages import get_languages
+from subgrab.utils.languages import get_language
 from subgrab.utils.scraping import scrape_page
 
+# DEBUGGINg with iPython
+from IPython import embed
 
 PROVIDERS = {'subscene': subscene,
              'subdb': subdb,
@@ -100,25 +102,18 @@ def main():
                         default="info",
                         help="Set log level for logger: debug|info|warning|error.")
 
-    args = parser.parse_args()
-
     logger.debug(f"Input with flags: {sys.argv}")
     logger.info("SubGrab script initialized")
 
     # LANGUAGE HANDLING
-    PROVIDER = args.provider.lower()
-    LANGUAGES = get_languages(PROVIDER)
-    global LANGUAGE
+    args = parser.parse_args()
 
-    try:
+    # get language value used by the provider
+    # global LANGUAGE needed anymore? ... to remove after testing
+    LANGUAGE = get_language(args.provider.lower(), args.lang.lower())
 
-        LANGUAGE = LANGUAGES[args.lang.lower()]
-        print(f"LANGUAGE: {LANGUAGE}")
-        logger.info(f"Language: {LANGUAGE['name']}")
-
-    except KeyError:
-
-        logger.error(f"Language {args.lang} not found. Either it's not supported by {args.provider}, or it's missing in subgrab language dictionary")
+    # PROVIDER HANDLING (to access provoder specific methods)
+    PROVIDER = PROVIDERS.get(args.provider.lower())
 
     # CLI ARGUMENT PROCESSING
     if args.silent:
@@ -129,31 +124,14 @@ def main():
     #if args.debug:
     #    cli.MODE = args.debug
 
-    # (1) Process entered titles first, if entered.
+    # (1) Process entered titles first.
     if args.media_name:
 
-        soup = scrape_page(url=PROVIDERS.get(PROVIDER).SUB_QUERY,
-                           parameter=args.media_name)
+        #embed()
 
-        titles_dict = PROVIDERS.get(PROVIDER).search_titles(soup)
-        title_url = PROVIDERS.get(PROVIDER).select_title(titles_dict, LANGUAGE)
-
-        soup = scrape_page(url=title_url)
-
-        entries_dict = PROVIDERS.get(PROVIDER).get_entries(soup)
-        print(entries_dict)
-
-        # safe to json (to not have to crawl again)
-        target = Path('.').joinpath('subtitles.json')
-        if not target.exists():
-            with open(target, 'w+') as f:
-                json.dump(dict(entries_dict), f)
-
-        entries_urls = PROVIDERS.get(PROVIDER).get_dl_pages(entries_dict, args.count)
-
-        for url in entries_urls:
-            PROVIDERS.get(PROVIDER).dl_sub(url)
-        #PROVIDERS.get(PROVIDER).get_data(titles_dict)
+        PROVIDER.search(parameter=args.media_name,
+                        lang=LANGUAGE,
+                        count=args.count)
 
 
     """
