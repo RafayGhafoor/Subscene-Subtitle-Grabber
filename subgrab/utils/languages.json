@@ -1,0 +1,815 @@
+{
+  "all": {
+    "name": "All languages",
+    "addic7ed": {
+      "accepted": true,
+      "value": 0
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "ar": {
+    "name": "Arabic",
+    "addic7ed": {
+      "accepted": true,
+      "value": 38
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": true,
+      "value": "2"
+    }
+  },
+  "az": {
+    "name": "Azerbaijani",
+    "addic7ed": {
+      "accepted": true,
+      "value": 48
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "55"
+    }
+  },
+  "bg": {
+    "name": "Bulgarian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 35
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "5"
+    }
+  },
+  "bn": {
+    "name": "Bengali",
+    "addic7ed": {
+      "accepted": true,
+      "value": 47
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "54"
+    }
+  },
+  "bs": {
+    "name": "Bosnian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 44
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "60"
+    }
+  },
+  "ca": {
+    "name": "Català",
+    "addic7ed": {
+      "accepted": true,
+      "value": 12
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": true,
+      "value": 49
+    }
+  },
+  "cs": {
+    "name": "Czech",
+    "addic7ed": {
+      "accepted": true,
+      "value": 14
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "9"
+    }
+  },
+  "da": {
+    "name": "Danish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 30
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": true,
+      "value": "10"
+    }
+  },
+  "de": {
+    "name": "German",
+    "addic7ed": {
+      "accepted": true,
+      "value": 11
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "19"
+    }
+  },
+  "el": {
+    "name": "Greek",
+    "addic7ed": {
+      "accepted": true,
+      "value": 27
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "21"
+    }
+  },
+  "en": {
+    "name": "English",
+    "addic7ed": {
+      "accepted": true,
+      "value": 1
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": true,
+      "value": "13"
+    }
+  },
+  "es": {
+    "name": "Spanish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 4
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "38"
+    }
+  },
+  "es-la": {
+    "name": "Spanish (Latin America)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 6
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "es-es": {
+    "name": "Spanish (Spain)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 5
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "et": {
+    "name": "Estonian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 54
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "16"
+    }
+  },
+  "eu": {
+    "name": "Euskera",
+    "addic7ed": {
+      "accepted": true,
+      "value": 13
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "fa": {
+    "name": "Farsi/Persian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 43
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": true,
+      "value": 46
+    }
+  },
+  "fi": {
+    "name": "Finnish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 28
+    },
+    "subdb": {
+      "accepted": false,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "17"
+    }
+  },
+  "fr": {
+    "name": "French",
+    "addic7ed": {
+      "accepted": true,
+      "value": 8
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "18"
+    }
+  },
+  "fr-ca": {
+    "name": "French (Canadian)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 53
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "gl": {
+    "name": "Galego",
+    "addic7ed": {
+      "accepted": true,
+      "value": 15
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "he": {
+    "name": "Hebrew",
+    "addic7ed": {
+      "accepted": true,
+      "value": 23
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "22"
+    }
+  },
+  "hi": {
+    "name": "Hindi",
+    "addic7ed": {
+      "accepted": true,
+      "value": 55
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "51"
+    }
+  },
+  "hr": {
+    "name": "Croatian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 31
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "8"
+    }
+  },
+  "hu": {
+    "name": "Hungarian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 20
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "23"
+    }
+  },
+  "hy": {
+    "name": "Armenian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 50
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "73"
+    }
+  },
+  "id": {
+    "name": "Indonesian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 37
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "44"
+    }
+  },
+  "is": {
+    "name": "Icelandic",
+    "addic7ed": {
+      "accepted": true,
+      "value": 56
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "25"
+    }
+  },
+  "it": {
+    "name": "Italian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 7
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": true,
+      "value": "26"
+    }
+  },
+  "ja": {
+    "name": "Japanese",
+    "addic7ed": {
+      "accepted": true,
+      "value": 32
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "27"
+    }
+  },
+  "ko": {
+    "name": "Korean",
+    "addic7ed": {
+      "accepted": true,
+      "value": 42
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "28"
+    }
+  },
+  "lt": {
+    "name": "Lithuanian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 58
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "43"
+    }
+  },
+  "lv": {
+    "name": "Latvian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 57
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "29"
+    }
+  },
+  "mk": {
+    "name": "Macedonian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 49
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "48"
+    }
+  },
+  "ms": {
+    "name": "Malay",
+    "addic7ed": {
+      "accepted": true,
+      "value": 40
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "50"
+    }
+  },
+  "nl": {
+    "name": "Dutch",
+    "addic7ed": {
+      "accepted": true,
+      "value": 17
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "11"
+    }
+  },
+  "no": {
+    "name": "Norwegian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 29
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "30"
+    }
+  },
+  "pl": {
+    "name": "Polish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 21
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "31"
+    }
+  },
+  "pt": {
+    "name": "Portuguese",
+    "addic7ed": {
+      "accepted": true,
+      "value": 9
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "32"
+    }
+  },
+  "pt-br": {
+    "name": "Portuguese (Brazilian)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 10
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": true,
+      "value": 4
+    }
+  },
+  "ro": {
+    "name": "Romanian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 26
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "33"
+    }
+  },
+  "ru": {
+    "name": "Russian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 19
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "34"
+    }
+  },
+  "si": {
+    "name": "Sinhala",
+    "addic7ed": {
+      "accepted": true,
+      "value": 60
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "58"
+    }
+  },
+  "sk": {
+    "name": "Slovak",
+    "addic7ed": {
+      "accepted": true,
+      "value": 25
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "36"
+    }
+  },
+  "sl": {
+    "name": "Slovenian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 22
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "37"
+    }
+  },
+  "sq": {
+    "name": "Albanian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 52
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "1"
+    }
+  },
+  "sr": {
+    "name": "Serbian (Cyrillic)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 39
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "sr-latn": {
+    "name": "Serbian (Latin)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 39
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "sv": {
+    "name": "Swedish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 18
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "39"
+    }
+  },
+  "ta": {
+    "name": "Tamil",
+    "addic7ed": {
+      "accepted": true,
+      "value": 59
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "59"
+    }
+  },
+  "th": {
+    "name": "Thai",
+    "addic7ed": {
+      "accepted": true,
+      "value": 46
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "40"
+    }
+  },
+  "tr": {
+    "name": "Turkish",
+    "addic7ed": {
+      "accepted": true,
+      "value": 16
+    },
+    "subdb": {
+      "accepted": true,
+      "value": ""
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "41"
+    }
+  },
+  "uk": {
+    "name": "Ukrainian",
+    "addic7ed": {
+      "accepted": true,
+      "value": 51
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false,
+      "value": "56"
+    }
+  },
+  "vi": {
+    "name": "Vietnamese",
+    "addic7ed": {
+      "accepted": true,
+      "value": 45
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": true,
+      "value": "45"
+    }
+  },
+  "zh-hans": {
+    "name": "Chinese (Simplified)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 41
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  },
+  "zh-hant": {
+    "name": "Chinese (Traditional)",
+    "addic7ed": {
+      "accepted": true,
+      "value": 24
+    },
+    "subdb": {
+      "accepted": false
+    },
+    "subscene": {
+      "accepted": false
+    }
+  }
+}

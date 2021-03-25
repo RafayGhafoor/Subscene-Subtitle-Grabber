@@ -2,60 +2,261 @@ import logging
 import os
 import re
 import zipfile
-
+from pathlib import Path
+import json
 import bs4
 import requests
+from collections import defaultdict
+from urllib.request import urljoin
+from subgrab.utils.scraping import scrape_page
+from subgrab.utils.scraping import zip_extractor
 
+# DEBUGGINg with iPython
+from IPython import embed
 
 logger = logging.getLogger("subscene.py")
+
 SUB_QUERY = "https://subscene.com/subtitles/searchbytitle"
-LANGUAGE = {
-    "AR": "Arabic",
-    "BU": "Burmese",
-    "DA": "Danish",
-    "DU": "Dutch",
-    "EN": "English",
-    "FA": "farsi_persian",
-    "IN": "Indonesian",
-    "IT": "Italian",
-    "MA": "Malay",
-    "SP": "Spanish",
-    "VI": "Vietnamese",
-}
 MODE = "prompt"
-DEFAULT_LANG = LANGUAGE["EN"]  # Default language in which subtitles
-# are downloaded.
 
+def search(parameter='', lang='', count=''):
+    """
+    Show search results and provide selection of one entry.
+    """
+    soup = scrape_page(url=SUB_QUERY,
+                       parameter=parameter)
 
-def scrape_page(url, parameter=""):
-    """
-    Retrieve content from a url.
-    """
-    HEADERS = {
-        "User-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
-    }
-    if parameter:
-        req = requests.get(url, params={"query": parameter}, headers=HEADERS)
+    titles_dict = search_titles(soup)
+
+    if not titles_dict:
+
+        print("No entry found.")
+
     else:
-        req = requests.get(url, headers=HEADERS)
-    if req.status_code != 200:
-        logger.debug("{} not retrieved.".format(req.url))
-        return
-    req_html = bs4.BeautifulSoup(req.content, "lxml")
-    return req_html
+
+        title_url = select_title(titles_dict, lang)
+
+        #embed()
+
+        soup = scrape_page(url=title_url)
+
+        entries_dict = get_entries(soup)
+        entries_urls = get_dl_pages(entries_dict, count)
+
+        for url in entries_urls:
+
+            dl_sub(url)
 
 
-def zip_extractor(name):
+def search_titles(soup, category='all'):
     """
-    Extracts zip file obtained from the Subscene site (which contains subtitles).
+    Returns a dict with numbers starting from 0 as keys and a dictionary
+    as value, where the keys are:
+
+        title: title of the movie/series
+        url: url to the subtitles for that title
+        count: no of available subtitles for that title
+
+    The results are put into categories by subscene:
+
+        exact: exact match
+        series: TV-Series matches
+        close: close matches
+        popular: popular matches
+
+    TODO: describe te rest...
     """
+
+    # check for any result
+    if not soup.select('h2 ~ ul'):
+
+        print("Sorry, the subtitles for this media file aren't available.")
+
+    else:
+
+        # dict & counter (to generate the keys)
+        titles_dict = {}
+        i = 0
+
+        if 'all' in category:
+
+            # select all results and skip further categories
+            selectors = soup.select('h2 ~ ul > li')
+            for selector in selectors:
+                titles_dict[i] = get_data(selector)
+                logger.debug(f"Dict entry with key={i} successlly written.")
+                i += 1
+
+        else:
+
+            if 'popular' in category:
+
+                selectors = soup.select('h2.popular ~ ul > li')
+                for selector in selectors:
+                    titles_dict[i] = get_data(selector)
+                    i += 1
+
+            if 'exact' in category:
+
+                selectors = soup.select('h2.exact ~ ul > li')
+                for selector in selectors:
+                    titles_dict[i] = get_data(selector)
+                    i += 1
+
+            if 'series' in category:
+
+                selectors = soup.select('h2:contains("TV-Series") ~ ul > li')
+                for selector in selectors:
+                    titles_dict[i] = get_data(selector)
+                    i += 1
+
+            if 'close' in category:
+
+                selectors = soup.select('h2.close ~ ul > li')
+                for selector in selectors:
+                    titles_dict[i] = get_data(selector)
+                    i += 1
+
+        return titles_dict
+
+
+def select_title(titles_dict, LANGUAGE, col_width=int(60) ):
+    """
+    Returns the url to all subtitles of the selected title and language.
+    Available titles are printed for selection.
+    """
+    lang = LANGUAGE
+
+    # seperate selection list
+    print('\n')
+
+    for i, data in titles_dict.items():
+
+        # pretty print results for selection
+        width = len(f"({i}): {data['title']}")
+
+        if width < col_width:
+
+            fill = col_width - width
+            print(f"({i}): {data['title']}{' '*fill}| {data['count']} (all languages)")
+
+        else:
+
+            print(f"({i}): {data['title']} | {data['count']}")
+
     try:
-        with zipfile.ZipFile(name, "r") as z:
-            # srt += [i for i in ZipFile.namelist() if i.endswith('.srt')][0]
-            z.extractall(".")
-        os.remove(name)
+        qs = int(input("\nPlease Enter Movie Number: "))
+
+        if qs in titles_dict.keys():
+
+            print(f"{titles_dict[qs]['url']}/{lang}")
+            return f"{titles_dict[qs]['url']}/{lang}"
+
+        else:
+
+            logger.error("Movie number is not valid.")
+
+
     except Exception as e:
-        logger.warning("Zip Extractor Error: {}".format(e))
+        logger.warning("Movie Skipped - {}".format(e))
+        # If pressed Enter, movie is skipped.
+        return
+
+
+def get_data(bs4elementTag):
+    """
+    Get data about subtitles:
+
+        - title
+        - URL
+        - subtitle count
+
+    remember: A bs4.element.ResultSet which will be returned by select method
+              are list objects. Get the element.Tag by using the index [0].
+    """
+
+    sub_title_links = {}
+
+    logger.debug(f"bs4.element.Tag: {bs4elementTag}")
+
+    title = bs4elementTag.select_one('a').text
+    logger.debug(f"TITLE: {title}")
+    url = urljoin('https://subscene.com', bs4elementTag.select_one('a')['href'])
+    logger.debug(f"URL: {url}")
+    count = bs4elementTag.select_one('.count').text.strip()
+    logger.debug(f"COUNT: {count}")
+
+    sub_title_links = {'title': title, 'url': url, 'count': count}
+
+    return sub_title_links
+
+
+def get_entries(soup):
+    """
+    Returns a dictionary with episode numbers (e.g. S01E01) as keys and
+    a list of urls to the final pages, where the subtitles can be
+    downloaded, as values.
+
+    """
+    results = soup.select('tbody > tr')
+
+    subs = defaultdict(list)
+    # note: some links will be duplicates, butset prevent the dict to
+    # save as json. set should be created directly before downloading
+
+    for r in results:
+
+        if r.select_one('td[class="banner-inlist"]'):
+
+            # skip banner rows
+            continue
+
+        else:
+
+            try:
+
+                filename = r.select_one('span:nth-child(2)').text.strip()
+                url = urljoin('https://subscene.com', r.select_one('a')['href'])
+                episode = re.search(r'S\d+E\d+', filename).group()
+                #info = r.select_one('div').text.strip()
+                #duration = re.search(r'(\d+:\d+)', info).group()
+                #source = re.search(r'From\s([a-zA-Z0-7.]+)', info).group(1)
+                print(f"filename: {filename}")
+                print(f"URL:      {url}")
+                print(f"episode:  {episode}")
+                #print(f"duration: {duration}")
+                #print(f"source:   {source}\n")
+
+                subs[episode].append(url)
+
+            except AttributeError:
+
+                # no subtitle for given language: pass silently
+                pass
+
+    if not subs:
+
+        logger.info("No subtitle available for given language.")
+
+    else:
+
+        return subs
+
+
+def get_dl_pages(entries_dict, max_files):
+    """
+    Returns as iterator with urls limited by max_files argument.
+    These urls can be delived to the dl_sub function.
+    """
+    links = []
+
+    for _, urls in entries_dict.items():
+
+        for url in list(set(urls))[:max_files]:
+
+            links.append(url)
+
+    return links
 
 
 def silent_mode(title_name, category, name=""):
@@ -74,11 +275,11 @@ def silent_mode(title_name, category, name=""):
      :param category: selects which category should be searched first in
      the html tree.
      """
-        if (
-            sort_by == "Popular"
-        ):  # Searches in Popular Category and the categories next to it.
+        # Searches in Popular Category and the categories next to it.
+        if sort_by == "Popular":
             section = category.find_all_next("div", {"class": "title"})
-        else:  # Searches in categories above popular tag.
+        # Searches in categories above popular tag.
+        else:
             section = title_name.find_all("div", {"class": "title"})
         for results in section:
             match = 1
