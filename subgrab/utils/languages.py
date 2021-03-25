@@ -23,4 +23,7 @@ def get_language(provider, language):
     except KeyError:
         logging.debug(f"Language {v['name']} not in subgrab language dictionary\nor not supported by {provider}.")
 
-    return value
+    if provider.lower() == 'subscene':
+        return name
+    else:
+        return value

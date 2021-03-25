@@ -76,13 +76,13 @@ def _get_data(bs4elementTagList, **kwargs):
         # set title as keys to fill defaultdict
         title_dict[title].append({'url': url, 'title': title, **ser_data})
 
-    print(title_dict)
-    #_pickle('title_dict.pickle', title_dict)
+    logger.debug(title_dict)
+
     return title_dict
 
     #yeah
 
-def select_title(titles_dict, col_width=int(60) ):
+def select_title(titles_dict, col_width=int(60)):
     """
     Print available titles for selection and returns a list of
     episodes/movie data (as dictionary).

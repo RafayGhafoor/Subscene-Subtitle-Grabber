@@ -2,7 +2,8 @@ import logging
 import os
 import re
 import zipfile
-
+from pathlib import Path
+import json
 import bs4
 import requests
 from collections import defaultdict
@@ -35,20 +36,12 @@ def search(parameter='', lang='', count=''):
 
         title_url = select_title(titles_dict, lang)
 
+        #embed()
+
         soup = scrape_page(url=title_url)
 
         entries_dict = get_entries(soup)
-        print(entries_dict)
-
-        # safe to json (to not have to crawl again)
-        target = Path('.').joinpath('subtitles.json')
-        if not target.exists():
-            with open(target, 'w+') as f:
-                json.dump(dict(entries_dict), f)
-
-        entries_urls = PROVIDER.get_dl_pages(entries_dict, count)
-
-        embed()
+        entries_urls = get_dl_pages(entries_dict, count)
 
         for url in entries_urls:
 
@@ -156,17 +149,11 @@ def select_title(titles_dict, LANGUAGE, col_width=int(60) ):
 
         if qs in titles_dict.keys():
 
-            print(f"{titles_dict[qs]['url']}/{lang['name']}")
-            return f"{titles_dict[qs]['url']}/{lang['name']}"
-
-        # test im Browser:
-        # https://subscene.com/
-        # https://subscene.com/subtitles/bless-this-mess-second-season/en
-        # or
-        # https://subscene.com/subtitles/bless-this-mess-second-season/13
-        # ITS THE NAME OF THE LANGUAGE!
+            print(f"{titles_dict[qs]['url']}/{lang}")
+            return f"{titles_dict[qs]['url']}/{lang}"
 
         else:
+
             logger.error("Movie number is not valid.")
 
 
